@@ -11,6 +11,7 @@ public class CharacterManager : MonoBehaviour {
     public float spd;
     public float maxEnergy;
     public float energy;
+    public float armor;
 
     public bool isPlayer;
 
@@ -22,7 +23,7 @@ public class CharacterManager : MonoBehaviour {
         Tank,
     }
 
-    protected void SetStatus() {
+    public void StatusReset() {
         switch (characterType) {
             case CHARACTER_TYPE.Warrior:
                 maxHp = 25.0f;
@@ -31,6 +32,7 @@ public class CharacterManager : MonoBehaviour {
                 spd = 1.1f;
                 maxEnergy = 5.0f;
                 energy = maxEnergy;
+                armor = 0.0f;
 
                 break;
 
@@ -41,13 +43,9 @@ public class CharacterManager : MonoBehaviour {
                 spd = 0.9f;
                 maxEnergy = 8.0f;
                 energy = maxEnergy;
+                armor = 0.0f;
 
                 break;
         }
-    }
-
-    public void StatusReset() {
-        hp = maxHp;
-        energy = maxEnergy;
     }
 }

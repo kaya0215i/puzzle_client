@@ -13,12 +13,4 @@ public class PieceInfo : MonoBehaviour {
     public float cooltime;
     public string descriptionText;
     public int price;
-
-    public enum WEAPONANDITEMS {
-        None,
-        Iron_Sword,
-        Strawberry,
-    }
-
-    public WEAPONANDITEMS items = WEAPONANDITEMS.None;
 }

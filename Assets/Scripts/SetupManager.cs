@@ -104,7 +104,7 @@ public class SetupManager : MonoBehaviour {
                     pieceManager = hitPiece.GetComponent<PieceManager>();
                     pieceManager.OnClick();
 
-                    if (!pieceManager.inShop) {
+                    if (!pieceManager.inShop && !pieceManager.firstPiece) {
                         sellAreaObject.SetActive(true);
                     }
 
@@ -123,14 +123,12 @@ public class SetupManager : MonoBehaviour {
                             child.gameObject.SetActive(true);
                             textUI.text = hitPieceInfo.name;
                         }
-                        else if (child.gameObject.name == "PieceWeaponDescriptionText") {
+                        else if (child.gameObject.name == "PieceItemDescriptionText") {
                             if (isAttack) {
                                 child.gameObject.SetActive(true);
-                                textUI.text = $"<sprite=2>ダメージ : {hitPieceInfo.amount}\n<sprite=1>必要エネルギー : {hitPieceInfo.energyCost}\n<sprite=0>クールタイム : {hitPieceInfo.cooltime}";
+                                textUI.text = $"<sprite=2>ダメージ : {hitPieceInfo.amount}\n<sprite=1>必要エネルギー : {hitPieceInfo.energyCost}\n<sprite=0>クールタイム : {hitPieceInfo.cooltime}\n" + hitPieceInfo.descriptionText;
                             }
-                        }
-                        else if (child.gameObject.name == "PieceItemDescriptionText") {
-                            if (!isAttack) {
+                            else if (!isAttack) {
                                 child.gameObject.SetActive(true);
                                 textUI.text = hitPieceInfo.descriptionText;
                             }

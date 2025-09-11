@@ -4,11 +4,6 @@ using UnityEngine;
 
 public class EnemyManager : CharacterManager {
     private void Start() {
-        characterType = CHARACTER_TYPE.Warrior;
-
-        name = "Enemy";
         isPlayer = false;
-
-        base.SetStatus();
     }
 }

@@ -11,7 +11,6 @@ public class PlayerManager : CharacterManager {
     public int rerollCount;
 
     private void Start() {
-        characterType = CHARACTER_TYPE.Warrior;
 
         name = "Player";
         isPlayer = true;
@@ -19,8 +18,6 @@ public class PlayerManager : CharacterManager {
         rerollCount = 0;
         battleLife = maxBattleLife;
         money = 10;
-
-        base.SetStatus();
     }
 
     public void AllReset() {

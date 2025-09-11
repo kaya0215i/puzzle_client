@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 7973986709807946860}
   - component: {fileID: 22727562154868539}
   m_Layer: 0
-  m_Name: Strawberry
+  m_Name: apple
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -28,8 +28,8 @@ Transform:
   m_GameObject: {fileID: 7163170150962038457}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0, y: 0, z: 0}
-  m_LocalScale: {x: 0.1, y: 0.085, z: 1}
+  m_LocalPosition: {x: 0.0267, y: -0.1634, z: 0}
+  m_LocalScale: {x: 0.008, y: 0.00665, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -75,7 +75,7 @@ SpriteRenderer:
   m_SortingLayerID: 1026566699
   m_SortingLayer: 2
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: d6ce32d3fdffb7a4590838bb82ca20c8, type: 3}
+  m_Sprite: {fileID: 2108618780, guid: ccb5c30998dd60b4d8550371b1b92ac1, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -98,8 +98,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35119c129ec2ad94aa87551452cf3fc7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: 2
-  name: "\u3044\u3061\u3054"
+  id: 13
+  name: "\u308A\u3093\u3054"
   isAttack: 0
   amount: 3
   energyUp: 1.5
@@ -107,8 +107,6 @@ MonoBehaviour:
   cooltime: 5
   descriptionText: "5\u79D2\u3054\u3068\u306B\u4F53\u529B\u30923\u56DE\u5FA9\u3001\u30A8\u30CD\u30EB\u30AE\u30FC\u30921.5\u7372\u5F97"
   price: 4
-  tier: 1
-  items: 2
 --- !u!114 &22727562154868539
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -121,4 +119,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf775796260b1db45be71df9cb3a0641, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  amount: 0
+  energyUp: 0
+  energyCost: 0
+  cooltime: 0
   isWhoPiece: 0

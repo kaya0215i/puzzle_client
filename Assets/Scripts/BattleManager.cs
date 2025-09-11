@@ -160,9 +160,6 @@ public class BattleManager : MonoBehaviour {
         time = 0;
         battleLogText.text = "";
 
-        playerManager.StatusReset();
-        enemyManager.StatusReset();
-
         // プレイヤーのデータをサーバーに送信
         UserDataRequest userDataRequest = new UserDataRequest();
         userDataRequest.Name = playerManager.name;
@@ -272,6 +269,9 @@ public class BattleManager : MonoBehaviour {
                 break;
         }
 
+        playerManager.StatusReset();
+        enemyManager.StatusReset();
+
         Invoke(nameof(StartBattle), 3.0f);
     }
 
@@ -281,10 +281,16 @@ public class BattleManager : MonoBehaviour {
 
         // プレイヤーの攻撃開始
         foreach (BattlePieceManager battlePieceManager in this.playerBattlePieceManager) {
+            battlePieceManager.SetStatus();
+        }
+        foreach (BattlePieceManager battlePieceManager in this.playerBattlePieceManager) {
             StartCoroutine(battlePieceManager.Action(playerManager, enemyManager));
         }
 
         // 敵の攻撃開始
+        foreach (BattlePieceManager battlePieceManager in this.enemyBattlePieceManager) {
+            battlePieceManager.SetStatus();
+        }
         foreach (BattlePieceManager battlePieceManager in this.enemyBattlePieceManager) {
             StartCoroutine(battlePieceManager.Action(enemyManager, playerManager));
         }
@@ -370,7 +376,7 @@ public class BattleManager : MonoBehaviour {
 
             playerManager.winCount++;
 
-            float addMoney = 12 * (((float)playerManager.currentRound / 10) + 1.0f);
+            float addMoney = 12 * (((float)playerManager.currentRound / 10) + 1.2f);
 
             playerManager.money += Mathf.RoundToInt(addMoney);
 
@@ -388,7 +394,7 @@ public class BattleManager : MonoBehaviour {
 
             playerManager.battleLife--;
 
-            float addMoney = 10 * (((float)playerManager.currentRound / 10) + 1.0f);
+            float addMoney = 10 * (((float)playerManager.currentRound / 10) + 1.2f);
 
             playerManager.money += Mathf.RoundToInt(addMoney);
 

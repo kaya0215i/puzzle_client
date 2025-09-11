@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &6567963384883103719
+--- !u!1 &5167150357994967690
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,39 +8,39 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 7045274590148939392}
-  - component: {fileID: 7033322019490699063}
-  - component: {fileID: 3470685954331404569}
-  - component: {fileID: 521253581053720634}
+  - component: {fileID: 106054606740115400}
+  - component: {fileID: 3886273023938511436}
+  - component: {fileID: 6014259127546974950}
+  - component: {fileID: 522129303769399516}
   m_Layer: 0
-  m_Name: iron_sword
+  m_Name: ruby
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &7045274590148939392
+--- !u!4 &106054606740115400
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6567963384883103719}
+  m_GameObject: {fileID: 5167150357994967690}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: -0.026176924, w: 0.99965733}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.012, y: 0.012, z: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.012, z: 0}
+  m_LocalScale: {x: 0.01, y: 0.008, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -3}
---- !u!212 &7033322019490699063
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!212 &3886273023938511436
 SpriteRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6567963384883103719}
+  m_GameObject: {fileID: 5167150357994967690}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -75,45 +75,45 @@ SpriteRenderer:
   m_SortingLayerID: 1026566699
   m_SortingLayer: 2
   m_SortingOrder: 0
-  m_Sprite: {fileID: 2096901754, guid: ccb5c30998dd60b4d8550371b1b92ac1, type: 3}
+  m_Sprite: {fileID: 1471475872, guid: ccb5c30998dd60b4d8550371b1b92ac1, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 40, y: 40}
+  m_Size: {x: 35.6, y: 44}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &3470685954331404569
+--- !u!114 &6014259127546974950
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6567963384883103719}
+  m_GameObject: {fileID: 5167150357994967690}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 35119c129ec2ad94aa87551452cf3fc7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: 1
-  name: "\u9244\u5263"
-  isAttack: 1
-  amount: 3
+  id: 18
+  name: "\u30EB\u30D3\u30FC"
+  isAttack: 0
+  amount: 1.07
   energyUp: 0
-  energyCost: 2
-  cooltime: 2
-  descriptionText: 
-  price: 3
---- !u!114 &521253581053720634
+  energyCost: 0
+  cooltime: 0
+  descriptionText: "\u96A3\u306E\u30D4\u30FC\u30B9\u306E\u653B\u6483\u529B\u304C7%\u4E0A\u6607 "
+  price: 4
+--- !u!114 &522129303769399516
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6567963384883103719}
+  m_GameObject: {fileID: 5167150357994967690}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cf775796260b1db45be71df9cb3a0641, type: 3}
