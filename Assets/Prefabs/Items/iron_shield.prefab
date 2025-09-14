@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 1962107033628683158}
   m_Layer: 0
   m_Name: iron_shield
-  m_TagString: Untagged
+  m_TagString: Item
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -101,11 +101,11 @@ MonoBehaviour:
   id: 12
   name: "\u9244\u76FE"
   isAttack: 0
-  amount: 5
+  amount: 6
   energyUp: 0
   energyCost: 0
-  cooltime: 4
-  descriptionText: "4\u79D2\u3054\u3068\u306B\u30A2\u30FC\u30DE\u30FC\u30925\u7372\u5F97 "
+  cooltime: 2
+  descriptionText: "2\u79D2\u3054\u3068\u306B\u30A2\u30FC\u30DE\u30FC\u30926\u7372\u5F97 "
   price: 6
 --- !u!114 &1962107033628683158
 MonoBehaviour:
@@ -119,8 +119,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf775796260b1db45be71df9cb3a0641, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  amount: 0
-  energyUp: 0
-  energyCost: 0
-  cooltime: 0
   isWhoPiece: 0

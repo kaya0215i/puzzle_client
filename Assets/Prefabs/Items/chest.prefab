@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 1789034952346534797}
   m_Layer: 0
   m_Name: chest
-  m_TagString: Untagged
+  m_TagString: Item
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -119,8 +119,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf775796260b1db45be71df9cb3a0641, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  amount: 0
-  energyUp: 0
-  energyCost: 0
-  cooltime: 0
   isWhoPiece: 0

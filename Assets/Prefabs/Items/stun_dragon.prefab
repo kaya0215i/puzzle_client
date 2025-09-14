@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 6915173309981644407}
   m_Layer: 0
   m_Name: stun_dragon
-  m_TagString: Untagged
+  m_TagString: Item
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -105,7 +105,7 @@ MonoBehaviour:
   energyUp: 0
   energyCost: 0
   cooltime: 7
-  descriptionText: "7\u79D2\u3054\u3068\u306B<sprite=4>\u30923\u4E0E\u3048\u308B "
+  descriptionText: "7\u79D2\u3054\u3068\u306B<sprite name=stun>\u30923\u4E0E\u3048\u308B "
   price: 7
 --- !u!114 &6915173309981644407
 MonoBehaviour:
@@ -119,8 +119,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf775796260b1db45be71df9cb3a0641, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  amount: 0
-  energyUp: 0
-  energyCost: 0
-  cooltime: 0
   isWhoPiece: 0

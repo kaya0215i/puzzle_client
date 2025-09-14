@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 4939505975434924116}
   m_Layer: 0
   m_Name: power_potion
-  m_TagString: Untagged
+  m_TagString: Item
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -101,11 +101,11 @@ MonoBehaviour:
   id: 15
   name: "\u529B\u306E\u30DD\u30FC\u30B7\u30E7\u30F3"
   isAttack: 0
-  amount: 1.03
+  amount: 1.07
   energyUp: 0
   energyCost: 0
   cooltime: 0
-  descriptionText: "\u653B\u6483\u529B\u304C3%\u4E0A\u6607 "
+  descriptionText: "\u653B\u6483\u529B\u304C7%\u4E0A\u6607 "
   price: 6
 --- !u!114 &4939505975434924116
 MonoBehaviour:
@@ -119,8 +119,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf775796260b1db45be71df9cb3a0641, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  amount: 0
-  energyUp: 0
-  energyCost: 0
-  cooltime: 0
   isWhoPiece: 0

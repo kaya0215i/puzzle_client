@@ -32,10 +32,10 @@ public class BattleManager : MonoBehaviour {
     [SerializeField] private Transform enemyPieceParent;
 
     // 生成したプレイヤーのピースリスト
-    private List<BattlePieceManager> playerBattlePieceManager;
+    [NonSerialized] public List<BattlePieceManager> playerBattlePieceManager;
 
     // 生成した敵のピースリスト
-    private List<BattlePieceManager> enemyBattlePieceManager;
+    [NonSerialized]public List<BattlePieceManager> enemyBattlePieceManager;
 
     // プレイヤーのHpスライダー
     [SerializeField] private Slider playerHpSlider;
@@ -60,6 +60,18 @@ public class BattleManager : MonoBehaviour {
 
     // 敵のEnergyスライダー
     [SerializeField] private Slider enemyEnergySlider;
+
+    // プレイヤーのシールドオブジェクト
+    [SerializeField] private GameObject playerShieldObject;
+
+    // プレイヤーのシールドテキスト
+    [SerializeField] private Text playerShieldText;
+
+    // 敵のシールドオブジェクト
+    [SerializeField] private GameObject enemyShieldObject;
+
+    // 敵のシールドテキスト
+    [SerializeField] private Text enemyShieldText;
 
     // 戦闘ログ表示トグル
     [SerializeField] private Toggle battleLogToggle;
@@ -96,6 +108,12 @@ public class BattleManager : MonoBehaviour {
 
     // 敵のVSパネルキャラオブジェクト
     [SerializeField] private GameObject[] enemyVSCharacters;
+
+    // プレイヤーのステータステキスト
+    [SerializeField] private TextMeshProUGUI playerStatusText;
+
+    // 敵のステータステキスト
+    [SerializeField] private TextMeshProUGUI enemyStatusText;
 
     // リザルト用パネル
     [SerializeField] private GameObject battleResultPanel;
@@ -177,11 +195,6 @@ public class BattleManager : MonoBehaviour {
             userDataRequest.PieceFormId[i] = new int();
             userDataRequest.PieceAngle[i] = new Quaternion();
 
-            if (!SetupManager.FieldPieceList[i].CompareTag("Piece")) {
-                userDataRequest.IndexNum[i]= -1;
-                continue;
-            }
-
             userDataRequest.IndexNum[i] = SetupManager.FieldPieceList[i].indexNum;
 
             userDataRequest.WeaponAndItemNum[i] = SetupManager.FieldPieceList[i].weaponAndItemNum;
@@ -203,9 +216,6 @@ public class BattleManager : MonoBehaviour {
         playerBattlePieceManager = new List<BattlePieceManager>();
 
         foreach (PieceManager piece in SetupManager.FieldPieceList) {
-            if (!piece.CompareTag("Piece")) {
-                continue;
-            }
             GameObject generatePiece = Instantiate(piece.gameObject, new Vector2(piece.transform.position.x + 15, piece.transform.position.y -1), piece.transform.rotation, playerPieceParent);
 
             playerBattlePieceManager.Add(generatePiece.transform.GetChild(0).GetComponent<BattlePieceManager>());
@@ -226,13 +236,15 @@ public class BattleManager : MonoBehaviour {
         SetBattleEnemyCharacter();
 
         for (int i = 0; i < 49; i++) {
+            GameObject generatePiece;
+
             if (enemyDataResponse.IndexNum[i] == -1) {
-                continue;
+                generatePiece = Instantiate(setupManager.nullPieceObject.gameObject, Vector3.zero, Quaternion.identity, enemyPieceParent);
             }
-
-            Vector2 generatePos = new Vector3(SetupManager.CanPutPiecePosList[i].x + 15, SetupManager.CanPutPiecePosList[i].y + 4.4f);
-
-            GameObject generatePiece = shopManager.CreatePiece(enemyPieceParent, generatePos, enemyDataResponse.PieceAngle[i], false, enemyDataResponse.WeaponAndItemNum[i], enemyDataResponse.PieceFormId[i]);
+            else {
+                Vector2 generatePos = new Vector3(SetupManager.CanPutPiecePosList[i].x + 15, SetupManager.CanPutPiecePosList[i].y + 4.4f);
+               generatePiece = shopManager.CreatePiece(enemyPieceParent, generatePos, enemyDataResponse.PieceAngle[i], false, enemyDataResponse.WeaponAndItemNum[i], enemyDataResponse.PieceFormId[i]);
+            }
 
             generatePiece.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Kinematic;
             generatePiece.GetComponent<PieceManager>().enabled = false;
@@ -272,6 +284,8 @@ public class BattleManager : MonoBehaviour {
         playerManager.StatusReset();
         enemyManager.StatusReset();
 
+        UIUpdate();
+
         Invoke(nameof(StartBattle), 3.0f);
     }
 
@@ -280,16 +294,28 @@ public class BattleManager : MonoBehaviour {
         isBattleStart = true;
 
         // プレイヤーの攻撃開始
+        int index = 0;
+
         foreach (BattlePieceManager battlePieceManager in this.playerBattlePieceManager) {
             battlePieceManager.SetStatus();
+            if (battlePieceManager.CompareTag("Item") || battlePieceManager.CompareTag("Weapon")) {
+                battlePieceManager.index = index;
+            }
+            index++;
         }
         foreach (BattlePieceManager battlePieceManager in this.playerBattlePieceManager) {
             StartCoroutine(battlePieceManager.Action(playerManager, enemyManager));
         }
 
         // 敵の攻撃開始
+        index = 0;
+
         foreach (BattlePieceManager battlePieceManager in this.enemyBattlePieceManager) {
             battlePieceManager.SetStatus();
+            if (battlePieceManager.CompareTag("Item") || battlePieceManager.CompareTag("Weapon")) {
+                battlePieceManager.index = index;
+            }
+            index++;
         }
         foreach (BattlePieceManager battlePieceManager in this.enemyBattlePieceManager) {
             StartCoroutine(battlePieceManager.Action(enemyManager, playerManager));
@@ -325,9 +351,27 @@ public class BattleManager : MonoBehaviour {
         time += Time.deltaTime;
 
 
-        // Energy自然回復
+        // Energy自然回復 5秒ごと
         if ((time % 5 >= 0) && (time % 5 <= 1 / (float)Application.targetFrameRate)) {
             EnergyUp();
+        }
+
+        // 毒の処理 1秒ごと
+        if ((time % 1 >= 0) && (time % 1 <= 1 / (float)Application.targetFrameRate)) {
+            // プレイヤー
+            if(playerManager.poison > 0) {
+                playerManager.poison--;
+                playerManager.hp -= 1.0f;
+
+                AddBattleLog("<color=#02FF00><sprite name=poison>のダメージを受けた</color>", true);
+            }
+
+            // 敵
+            if (enemyManager.poison > 0) {
+                enemyManager.poison--;
+                enemyManager.hp -= 1.0f;
+                AddBattleLog("<color=#02FF00><sprite name=poison>のダメージを受けた</color>", false);
+            }
         }
 
         // UI更新
@@ -462,6 +506,56 @@ public class BattleManager : MonoBehaviour {
 
         enemyHpText.text = enemyManager.hp.ToString("f1") + " / " + enemyManager.maxHp.ToString("f1");
         enemyEnergyText.text = enemyManager.energy.ToString("f1") + " / " + enemyManager.maxEnergy.ToString("f1");
+
+        // シールド
+        if(playerManager.shield > 0.0f) {
+            playerShieldObject.SetActive(true);
+            playerShieldText.text = playerManager.shield.ToString("f1");
+        }
+        else {
+            playerShieldObject.SetActive(false);
+            playerShieldText.text = "";
+        }
+
+        if (enemyManager.shield > 0.0f) {
+            enemyShieldObject.SetActive(true);
+            enemyShieldText.text = enemyManager.shield.ToString("f1");
+        }
+        else {
+            enemyShieldObject.SetActive(false);
+            enemyShieldText.text = "";
+        }
+
+        // ステータステキスト
+        playerStatusText.text = "";
+        enemyStatusText.text = "";
+
+        // 毒
+        if(playerManager.poison > 0) {
+            playerStatusText.text = "<sprite name=poison> " + playerManager.poison;
+        }
+
+        if(enemyManager.poison > 0) {
+            enemyStatusText.text = "<sprite name=poison> " + enemyManager.poison;
+        }
+
+        // 麻痺
+        if (playerManager.stun > 0) {
+            playerStatusText.text = "<sprite name=stun> " + playerManager.stun;
+        }
+
+        if (enemyManager.stun > 0) {
+            enemyStatusText.text = "<sprite name=stun> " + enemyManager.stun;
+        }
+
+        // 睡眠
+        if (playerManager.sleep > 0) {
+            playerStatusText.text = "<sprite name=sleep> " + playerManager.sleep;
+        }
+
+        if (enemyManager.sleep > 0) {
+            enemyStatusText.text = "<sprite name=sleep> " + enemyManager.sleep;
+        }
     }
 
     // Energy自然回復
@@ -489,7 +583,7 @@ public class BattleManager : MonoBehaviour {
         else if (!isPlayer) {
             battleLogText.text += "<align=\"right\">" + text + "  :" + time.ToString("f1") + "s</align>\n";
         }
-        scrollRect.verticalNormalizedPosition = 0;
+        scrollRect.verticalNormalizedPosition = -1;
         battleLogText.GetComponent<ContentSizeFitter>().SetLayoutVertical();
     }
 

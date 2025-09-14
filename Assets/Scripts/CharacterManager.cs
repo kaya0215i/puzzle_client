@@ -11,7 +11,11 @@ public class CharacterManager : MonoBehaviour {
     public float spd;
     public float maxEnergy;
     public float energy;
-    public float armor;
+    public float shield;
+
+    public int poison;
+    public int stun;
+    public int sleep;
 
     public bool isPlayer;
 
@@ -32,7 +36,10 @@ public class CharacterManager : MonoBehaviour {
                 spd = 1.1f;
                 maxEnergy = 5.0f;
                 energy = maxEnergy;
-                armor = 0.0f;
+                shield = 0.0f;
+                poison = 0;
+                stun = 0;
+                sleep = 0;
 
                 break;
 
@@ -43,7 +50,10 @@ public class CharacterManager : MonoBehaviour {
                 spd = 0.9f;
                 maxEnergy = 8.0f;
                 energy = maxEnergy;
-                armor = 0.0f;
+                shield = 0.0f;
+                poison = 0;
+                stun = 0;
+                sleep = 0;
 
                 break;
         }

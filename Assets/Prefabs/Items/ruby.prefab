@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 522129303769399516}
   m_Layer: 0
   m_Name: ruby
-  m_TagString: Untagged
+  m_TagString: Item
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -101,11 +101,11 @@ MonoBehaviour:
   id: 18
   name: "\u30EB\u30D3\u30FC"
   isAttack: 0
-  amount: 1.07
+  amount: 1.2
   energyUp: 0
   energyCost: 0
   cooltime: 0
-  descriptionText: "\u96A3\u306E\u30D4\u30FC\u30B9\u306E\u653B\u6483\u529B\u304C7%\u4E0A\u6607 "
+  descriptionText: "\u96A3\u306E\u30D4\u30FC\u30B9\u306E\u653B\u6483\u529B\u304C20%\u4E0A\u6607 "
   price: 4
 --- !u!114 &522129303769399516
 MonoBehaviour:
@@ -119,8 +119,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf775796260b1db45be71df9cb3a0641, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  amount: 0
-  energyUp: 0
-  energyCost: 0
-  cooltime: 0
   isWhoPiece: 0

@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 4504301587431809982}
   m_Layer: 0
   m_Name: poison_dragon
-  m_TagString: Untagged
+  m_TagString: Item
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -105,7 +105,9 @@ MonoBehaviour:
   energyUp: 0
   energyCost: 0
   cooltime: 5
-  descriptionText: "5\u79D2\u3054\u3068\u306B<sprite=9>\u30921\u4E0E\u3048\u308B\\n<sprite=9>\u3092\u53D7\u3051\u3066\u3044\u308B\u3068\u4E0E\u3048\u308B<sprite=9>\u306E\u91CF\u304C\u5897\u3048\u308B "
+  descriptionText: "5\u79D2\u3054\u3068\u306B<sprite name=poison>\u30921\u4E0E\u3048\u308B\\n<sprite
+    name=poison>\u3092\u53D7\u3051\u3066\u3044\u308B\u3068\u4E0E\u3048\u308B<sprite
+    name=poison>\u306E\u91CF\u304C\u5897\u3048\u308B "
   price: 6
 --- !u!114 &4504301587431809982
 MonoBehaviour:
@@ -119,8 +121,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf775796260b1db45be71df9cb3a0641, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  amount: 0
-  energyUp: 0
-  energyCost: 0
-  cooltime: 0
   isWhoPiece: 0

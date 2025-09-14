@@ -126,7 +126,7 @@ public class SetupManager : MonoBehaviour {
                         else if (child.gameObject.name == "PieceItemDescriptionText") {
                             if (isAttack) {
                                 child.gameObject.SetActive(true);
-                                textUI.text = $"<sprite=2>ダメージ : {hitPieceInfo.amount}\n<sprite=1>必要エネルギー : {hitPieceInfo.energyCost}\n<sprite=0>クールタイム : {hitPieceInfo.cooltime}\n" + hitPieceInfo.descriptionText;
+                                textUI.text = $"<sprite name=damage>ダメージ : {hitPieceInfo.amount}\n<sprite name=energy>必要エネルギー : {hitPieceInfo.energyCost}\n<sprite name=cooltime>クールタイム : {hitPieceInfo.cooltime}\n" + hitPieceInfo.descriptionText;
                             }
                             else if (!isAttack) {
                                 child.gameObject.SetActive(true);
@@ -258,6 +258,7 @@ public class SetupManager : MonoBehaviour {
                 }
                 if (j == InventoryPieceList.Count - 1) {
                     FieldPieceList[i] = nullPieceObject;
+                    FieldPieceList[i].indexNum = -1;
                 }
             }
         }

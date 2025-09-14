@@ -8,11 +8,14 @@ using static PieceInfo;
 public class BattlePieceManager : MonoBehaviour {
     private PieceInfo pieceInfo;
     private BattleManager battleManager;
+    private PlayerManager playerManager;
 
-    public float amount;
-    public float energyUp;
-    public float energyCost;
-    public float cooltime;
+    [NonSerialized] public int index = -1;
+
+    [NonSerialized] public float amount;
+    [NonSerialized] public float energyUp;
+    [NonSerialized] public float energyCost;
+    [NonSerialized] public float cooltime;
 
     public enum IsWhoPiece {
         None,
@@ -25,6 +28,7 @@ public class BattlePieceManager : MonoBehaviour {
     private void Awake() {
         pieceInfo = GetComponent<PieceInfo>();
         battleManager = GameObject.Find("BattleManager").GetComponent<BattleManager>();
+        playerManager = GameObject.Find("PlayerManager").GetComponent<PlayerManager>();
     }
 
     public void SetStatus() {
@@ -35,8 +39,16 @@ public class BattlePieceManager : MonoBehaviour {
     }
 
     public IEnumerator Action(CharacterManager attacker, CharacterManager target) {
+        if(index == -1) {
+            yield break;
+        }
+
         while (true) {
             yield return new WaitForSeconds(cooltime);
+
+            if (attacker.sleep > 0) {
+                battleManager.AddBattleLog("<color=#5A93FF>ぐっすり眠っているzzz</color> ( " + pieceInfo.name + " )", attacker.isPlayer);
+            }
 
             if (attacker.energy < energyCost) {
                 battleManager.AddBattleLog("<color=red>エネルギーが足りない...</color> ( " + pieceInfo.name + " )", attacker.isPlayer);
@@ -46,94 +58,121 @@ public class BattlePieceManager : MonoBehaviour {
             attacker.energy -= energyCost;
 
             bool isHit = IsAttackHit(target.spd);
+            if (attacker.stun > 0) {
+                isHit = IsAttackHit(0.0f, 50.0f);
+            }
+
+            float attack;
+            float armorTemp;
 
             // 行動
             switch (pieceInfo.id) {
                 // 鉄剣
                 case 1:
+                // 斧
+                case 2:
+                // ハンマー
+                case 3:
+                // 短剣
+                case 5:
+                // 小斧
+                case 6:
+                // こん棒
+                case 8:
+                // 錆びれた剣
+                case 9:
                     if (!isHit) {
                         battleManager.AddBattleLog("<color=red>攻撃が外れた</color> ( " + pieceInfo.name + " )", attacker.isPlayer);
                         break;
                     }
 
-                    float attack = amount * attacker.atk;
+                    attack = amount * attacker.atk;
 
-                    if(attack < 0) {
+                    if (attack < 0) {
                         attack = 0;
                     }
 
-                    target.hp -= attack;
+                    armorTemp = target.shield;
+
+                    target.shield -= attack;
+
+                    if (target.shield < 0) {
+                        target.shield = 0;
+
+                        target.hp -= (attack - armorTemp);
+                    }
 
                     battleManager.AddBattleLog(attack + "ダメージを与えた ( " + pieceInfo.name + " )", attacker.isPlayer);
 
                     break;
 
-                // 斧
-                case 2:
-
-                    break;
-
-                // ハンマー
-                case 3:
-
-                    break;
-
                 // ピストル
                 case 4:
+                    if (!IsAttackHit(0.0f, 80.0f)) {
+                        battleManager.AddBattleLog("<color=red>攻撃が外れた</color> ( " + pieceInfo.name + " )", attacker.isPlayer);
+                        break;
+                    }
 
-                    break;
+                    attack = amount * attacker.atk;
 
+                    if (attack < 0) {
+                        attack = 0;
+                    }
 
-                // 短剣
-                case 5:
+                    armorTemp = target.shield;
 
-                    break;
+                    target.shield -= attack;
 
-                // 小斧
-                case 6:
+                    if (target.shield < 0) {
+                        target.shield = 0;
+
+                        target.hp -= (attack - armorTemp);
+                    }
+
+                    battleManager.AddBattleLog(attack + "ダメージを与えた ( " + pieceInfo.name + " )", attacker.isPlayer);
 
                     break;
 
                 // リボルバー
                 case 7:
+                    if (!IsAttackHit(0.0f, 50.0f)) {
+                        battleManager.AddBattleLog("<color=red>攻撃が外れた</color> ( " + pieceInfo.name + " )", attacker.isPlayer);
+                        break;
+                    }
 
-                    break;
+                    attack = amount * attacker.atk;
 
-                // こん棒
-                case 8:
+                    if (attack < 0) {
+                        attack = 0;
+                    }
 
-                    break;
+                    armorTemp = target.shield;
 
-                // 錆びれた剣
-                case 9:
+                    target.shield -= attack;
+
+                    if (target.shield < 0) {
+                        target.shield = 0;
+
+                        target.hp -= (attack - armorTemp);
+                    }
+
+                    battleManager.AddBattleLog(attack + "ダメージを与えた ( " + pieceInfo.name + " )", attacker.isPlayer);
 
                     break;
 
                 // 木盾
                 case 10:
-
-                    break;
-
                 // 銅盾
                 case 11:
-
-                    break;
-
                 // 鉄盾
                 case 12:
+                    attacker.shield += amount;
+                    battleManager.AddBattleLog("シールドを" + amount + "獲得した (" + pieceInfo.name + " )", attacker.isPlayer);
 
                     break;
 
                 // りんご
                 case 13:
-                    attacker.hp += amount;
-                    attacker.energy += energyUp;
-
-                    battleManager.AddBattleLog("体力を" + amount + "回復した ( " + pieceInfo.name + " )", attacker.isPlayer);
-                    battleManager.AddBattleLog("エネルギーを" + energyUp + "回復した ( " + pieceInfo.name + " )", attacker.isPlayer);
-
-                    break;
-
                 // 梨
                 case 14:
                     attacker.hp += amount;
@@ -141,50 +180,155 @@ public class BattlePieceManager : MonoBehaviour {
 
                     battleManager.AddBattleLog("体力を" + amount + "回復した ( " + pieceInfo.name + " )", attacker.isPlayer);
                     battleManager.AddBattleLog("エネルギーを" + energyUp + "回復した ( " + pieceInfo.name + " )", attacker.isPlayer);
+
                     break;
 
                 // 力のポーション
                 case 15:
+                    attacker.atk *= amount;
+                    battleManager.AddBattleLog("攻撃力が上がった (" + pieceInfo.name + " )", attacker.isPlayer);
 
-                    break;
+                    yield break;
 
                 // 素早さのポーション
                 case 16:
+                    attacker.spd *= amount;
+                    battleManager.AddBattleLog("素早さが上がった (" + pieceInfo.name + " )", attacker.isPlayer);
 
-                    break;
+                    yield break;
 
                 // 毒のポーション
                 case 17:
+                    target.poison += (int)amount;
+                    battleManager.AddBattleLog("<sprite name=poison>を" + amount + "与えた (" + pieceInfo.name + " )", attacker.isPlayer);
 
                     break;
 
                 // ルビー
                 case 18:
+                    // 左
+                    if (index % 7 != 0) {
+                        if (battleManager.playerBattlePieceManager[index - 1].CompareTag("Weapon")) {
+                            if (attacker.isPlayer) {
+                                battleManager.playerBattlePieceManager[index - 1].amount *= amount;
+                            }
+                            else {
+                                battleManager.enemyBattlePieceManager[index - 1].amount *= amount;
+                            }
+                        }
+                    }
+                    // 右
+                    if ((index + 1) % 7 != 0) {
+                        if (battleManager.playerBattlePieceManager[index - 1].CompareTag("Weapon")) {
+                            if (attacker.isPlayer) {
+                                battleManager.playerBattlePieceManager[index + 1].amount *= amount;
+                            }
+                            else {
+                                battleManager.enemyBattlePieceManager[index + 1].amount *= amount;
+                            }
+                        }
+                    }
+                    // 上
+                    if (!((42 <= index) && (index <= 48))) {
+                        if (battleManager.playerBattlePieceManager[index - 1].CompareTag("Weapon")) {
+                            if (attacker.isPlayer) {
+                                battleManager.playerBattlePieceManager[index + 7].amount *= amount;
+                            }
+                            else {
+                                battleManager.enemyBattlePieceManager[index + 7].amount *= amount;
+                            }
+                        }
+                    }
+                    // 下
+                    if (!((0 <= index) && (index <= 6))) {
+                        if (battleManager.playerBattlePieceManager[index - 1].CompareTag("Weapon")) {
+                            if (attacker.isPlayer) {
+                                battleManager.playerBattlePieceManager[index - 7].amount *= amount;
+                            }
+                            else {
+                                battleManager.enemyBattlePieceManager[index - 7].amount *= amount;
+                            }
+                        }
+                    }
 
-                    break;
+                    yield break;
 
                 // サファイア
                 case 19:
+                    // 左
+                    if (index % 7 != 0) {
+                        if (attacker.isPlayer) {
+                            battleManager.playerBattlePieceManager[index - 1].cooltime /= amount;
+                        }
+                        else {
+                            battleManager.enemyBattlePieceManager[index - 1].cooltime /= amount;
+                        }
+                    }
+                    // 右
+                    if ((index + 1) % 7 != 0) {
+                        if (attacker.isPlayer) {
+                            battleManager.playerBattlePieceManager[index + 1].cooltime /= amount;
+                        }
+                        else {
+                            battleManager.enemyBattlePieceManager[index + 1].cooltime /= amount;
+                        }
+
+                    }
+                    // 上
+                    if (!((42 <= index) && (index <= 48))) {
+                        if (attacker.isPlayer) {
+                            battleManager.playerBattlePieceManager[index + 7].cooltime /= amount;
+                        }
+                        else {
+                            battleManager.enemyBattlePieceManager[index + 7].cooltime /= amount;
+                        }
+
+                    }
+                    // 下
+                    if (!((0 <= index) && (index <= 6))) {
+                        if (attacker.isPlayer) {
+                            battleManager.playerBattlePieceManager[index - 7].cooltime /= amount;
+                        }
+                        else {
+                            battleManager.enemyBattlePieceManager[index - 7].cooltime /= amount;
+                        }
+                    }
 
                     break;
 
                 // 毒龍
                 case 20:
+                    target.poison += (int)amount + (attacker.poison * 2);
+                    battleManager.AddBattleLog("<sprite name=poison>を" + ((int)amount + (attacker.poison * 2)) + "与えた (" + pieceInfo.name + " )", attacker.isPlayer);
 
                     break;
 
                 // 睡龍
                 case 21:
+                    target.sleep += (int)amount;
+                    battleManager.AddBattleLog("<sprite name=sleep>を" + amount + "与えた (" + pieceInfo.name + " )", attacker.isPlayer);
 
                     break;
 
                 // 痺龍
                 case 22:
+                    target.stun += (int)amount;
+                    battleManager.AddBattleLog("<sprite name=stun>を" + amount + "与えた (" + pieceInfo.name + " )", attacker.isPlayer);
 
                     break;
 
                 // チェスト
                 case 23:
+                    if (!IsAttackHit(0.0f, 5.0f)) {
+                        battleManager.AddBattleLog("<color=red>中身は空っぽだった..</color> ( " + pieceInfo.name + " )", attacker.isPlayer);
+                        break;
+                    }
+
+                    if (attacker.isPlayer) {
+                        playerManager.money += (int)amount;
+                    }
+
+                    battleManager.AddBattleLog("コインを" + amount + "獲得 ( " + pieceInfo.name + " )", attacker.isPlayer);
 
                     break;
 

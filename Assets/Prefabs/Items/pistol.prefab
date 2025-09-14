@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 598319753509173723}
   m_Layer: 0
   m_Name: pistol
-  m_TagString: Untagged
+  m_TagString: Weapon
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -101,11 +101,11 @@ MonoBehaviour:
   id: 4
   name: "\u30D4\u30B9\u30C8\u30EB"
   isAttack: 1
-  amount: 4
+  amount: 6
   energyUp: 0
   energyCost: 1
   cooltime: 3.5
-  descriptionText: 
+  descriptionText: "20%\u306E\u78BA\u7387\u3067\u5916\u308C\u308B "
   price: 4
 --- !u!114 &598319753509173723
 MonoBehaviour:
@@ -119,8 +119,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf775796260b1db45be71df9cb3a0641, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  amount: 0
-  energyUp: 0
-  energyCost: 0
-  cooltime: 0
   isWhoPiece: 0
