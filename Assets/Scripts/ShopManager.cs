@@ -36,7 +36,7 @@ public class ShopManager : MonoBehaviour {
     [SerializeField] private Transform priceCardParend;
 
     // プレイヤーマネージャー
-    [SerializeField] private PlayerManager playerManager;
+    [SerializeField] private PlayerBattleManager playerManager;
 
     public void SortShop() {
         // ショップの親オブジェクトを空にする
@@ -92,9 +92,9 @@ public class ShopManager : MonoBehaviour {
             num = UnityEngine.Random.Range(0, itemPrefabs.Count);
         }
 
-        pieceManager.weaponAndItemNum = num;
+        pieceManager.itemNum = num + 1;
 
-        GameObject pieceItems = Instantiate(itemPrefabs[num], pieceObject.transform.position, itemPrefabs[num].transform.rotation, pieceObject.transform);
+        GameObject pieceItems = Instantiate(itemPrefabs[num], pieceObject.transform.position, pieceObject.transform.rotation, pieceObject.transform);
 
         if(isPlayer) {
             pieceItems.GetComponent<BattlePieceManager>().isWhoPiece = BattlePieceManager.IsWhoPiece.Player;

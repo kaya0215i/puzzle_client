@@ -34,7 +34,7 @@ public class CharacterManager : MonoBehaviour {
                 hp = maxHp;
                 atk = 1.2f;
                 spd = 1.1f;
-                maxEnergy = 5.0f;
+                maxEnergy = 8.0f;
                 energy = maxEnergy;
                 shield = 0.0f;
                 poison = 0;
@@ -48,7 +48,7 @@ public class CharacterManager : MonoBehaviour {
                 hp = maxHp;
                 atk = 0.9f;
                 spd = 0.9f;
-                maxEnergy = 8.0f;
+                maxEnergy = 12.0f;
                 energy = maxEnergy;
                 shield = 0.0f;
                 poison = 0;

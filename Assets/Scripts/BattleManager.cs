@@ -14,10 +14,10 @@ public class BattleManager : MonoBehaviour {
     [SerializeField] private SetupManager setupManager;
 
     // プレイヤーマネージャー
-    [SerializeField] private PlayerManager playerManager;
+    [SerializeField] private PlayerBattleManager playerManager;
 
     // エネミーマネージャー
-    [SerializeField] private EnemyManager enemyManager;
+    [SerializeField] private EnemyBattleManager enemyManager;
 
     // ショップマネージャー
     [SerializeField] private ShopManager shopManager;
@@ -145,11 +145,21 @@ public class BattleManager : MonoBehaviour {
     // バトルが始まってからの秒数
     private float time;
 
+    private float suddenDeathTimer;
+    private float energyTimer;
+    private float poisonTimer;
+    private float sleepTimer;
+    private float stunTimer;
+
     // ゲームクリア
     private bool isGameClear;
 
     // ゲームオーバー
     private bool isGameOver;
+
+    // サドンデス用
+    private bool isSuddenDeath;
+    private float suddenDeathValue;
 
     private void Start() {
         battleUICanvas.SetActive(false);
@@ -160,14 +170,18 @@ public class BattleManager : MonoBehaviour {
 
         isGameClear = false;
         isGameOver = false;
+
+        isSuddenDeath = false;
+        suddenDeathValue = 1;
     }
 
     // バトル初期化
-    public void Init() {
+    public IEnumerator Init() {
         enabled = true;
         battleUICanvas.SetActive(true);
         battleResultPanel.SetActive(false);
         gameSetPanel.SetActive(false);
+        vsPanel.SetActive(true);
 
         victoryObject.SetActive(false);
         defeatObject.SetActive(false);
@@ -175,38 +189,44 @@ public class BattleManager : MonoBehaviour {
         gameClearObject.SetActive(false);
         gameOverObject.SetActive(false);
 
+        isSuddenDeath = false;
+        suddenDeathValue = 1;
+
         time = 0;
+
+        suddenDeathTimer = 0;
+        energyTimer = 0;
+        poisonTimer = 0;
+        sleepTimer = 0;
+        stunTimer = 0;
+
         battleLogText.text = "";
 
+        // サーバーから受け取るプレイヤーデータ
+        EnemyFieldDataResponse enemyDataResponse = new EnemyFieldDataResponse();
+
+        Coroutine getEnemyFieldData = null;
+
         // プレイヤーのデータをサーバーに送信
-        UserDataRequest userDataRequest = new UserDataRequest();
-        userDataRequest.Name = playerManager.name;
-        userDataRequest.CharacterType = playerManager.characterType;
-        userDataRequest.currentRound = playerManager.currentRound;
-        userDataRequest.IndexNum = new int[49];
-        userDataRequest.WeaponAndItemNum = new int[49];
-        userDataRequest.PieceFormId = new int[49];
-        userDataRequest.PieceAngle = new Quaternion[49];
+        Coroutine registPlayerFieldData = StartCoroutine(NetworkManager.Instance.RegistUserFieldData(
+            playerManager,
+            result => {
+                if (result) {
+                    // 敵のデータを取得
+                    getEnemyFieldData = StartCoroutine(NetworkManager.Instance.GetEnemyFieldData(
+                        playerManager,
+                        resultObjects => {
+                            // サーバーから受け取ったプレイヤーデータを敵に反映
+                            enemyDataResponse = resultObjects;
+                        }));
+                }
+                else {
+                    Debug.Log("フィールド登録が正常に終了しませんでした。");
+                }
+            }));
 
-        for (int i = 0;  i < 49; i++) {
-
-            userDataRequest.IndexNum[i] = new int();
-            userDataRequest.WeaponAndItemNum[i] = new int();
-            userDataRequest.PieceFormId[i] = new int();
-            userDataRequest.PieceAngle[i] = new Quaternion();
-
-            userDataRequest.IndexNum[i] = SetupManager.FieldPieceList[i].indexNum;
-
-            userDataRequest.WeaponAndItemNum[i] = SetupManager.FieldPieceList[i].weaponAndItemNum;
-
-            userDataRequest.PieceFormId[i] = SetupManager.FieldPieceList[i].pieceFormId;
-
-            userDataRequest.PieceAngle[i] = SetupManager.FieldPieceList[i].pieceAngle;
-        }
-
-        string json = JsonConvert.SerializeObject(userDataRequest);
-
-        Debug.Log(json);
+        yield return registPlayerFieldData;
+        yield return getEnemyFieldData;
 
         // プレイヤーのピースを生成
         foreach (Transform child in playerPieceParent) {
@@ -221,8 +241,6 @@ public class BattleManager : MonoBehaviour {
             playerBattlePieceManager.Add(generatePiece.transform.GetChild(0).GetComponent<BattlePieceManager>());
         }
 
-        // サーバーから受け取ったプレイヤーデータを敵に反映
-        EnemyDataResponse enemyDataResponse = JsonConvert.DeserializeObject<EnemyDataResponse>(json);
         // 敵のピースを生成
         foreach (Transform child in enemyPieceParent) {
             Destroy(child.gameObject);
@@ -236,16 +254,20 @@ public class BattleManager : MonoBehaviour {
         SetBattleEnemyCharacter();
 
         for (int i = 0; i < 49; i++) {
-            GameObject generatePiece;
-
-            if (enemyDataResponse.IndexNum[i] == -1) {
-                generatePiece = Instantiate(setupManager.nullPieceObject.gameObject, Vector3.zero, Quaternion.identity, enemyPieceParent);
+            GameObject generatePiece = null;
+            for (int j = 0; j < 49; j++) {
+                if (enemyDataResponse.IndexNum.Count > j) {
+                    if (enemyDataResponse.IndexNum[j] == i) {
+                        Vector2 generatePos = new Vector3(SetupManager.CanPutPiecePosList[i].x + 15, SetupManager.CanPutPiecePosList[i].y + 4.4f);
+                        generatePiece = shopManager.CreatePiece(enemyPieceParent, generatePos, enemyDataResponse.PieceAngle[j], false, enemyDataResponse.ItemNum[j] - 1, enemyDataResponse.PieceFormId[j]);
+                        break;
+                    }
+                }
+                else if (j == 48) {
+                    generatePiece = Instantiate(setupManager.nullPieceObject.gameObject, Vector3.zero, Quaternion.identity, enemyPieceParent);
+                    break;
+                }
             }
-            else {
-                Vector2 generatePos = new Vector3(SetupManager.CanPutPiecePosList[i].x + 15, SetupManager.CanPutPiecePosList[i].y + 4.4f);
-               generatePiece = shopManager.CreatePiece(enemyPieceParent, generatePos, enemyDataResponse.PieceAngle[i], false, enemyDataResponse.WeaponAndItemNum[i], enemyDataResponse.PieceFormId[i]);
-            }
-
             generatePiece.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Kinematic;
             generatePiece.GetComponent<PieceManager>().enabled = false;
 
@@ -253,8 +275,6 @@ public class BattleManager : MonoBehaviour {
         }
 
         // VSPanelの設定
-        vsPanel.SetActive(true);
-
         playerVSNameText.text = playerManager.name;
         switch (playerManager.characterType) {
             case CharacterManager.CHARACTER_TYPE.Warrior:
@@ -286,7 +306,9 @@ public class BattleManager : MonoBehaviour {
 
         UIUpdate();
 
-        Invoke(nameof(StartBattle), 3.0f);
+        yield return new WaitForSeconds(3);
+
+        StartBattle();
     }
 
     private void StartBattle() {
@@ -321,8 +343,12 @@ public class BattleManager : MonoBehaviour {
             StartCoroutine(battlePieceManager.Action(enemyManager, playerManager));
         }
     }
+    
+    // ゲームが終わったら
+    private IEnumerator GameSet() {
+        enabled = false;
+        yield return new WaitForSeconds(3);
 
-    private void GameSet() {
         if (isGameClear) {
             gameSetPanel.SetActive(true);
             gameClearObject.SetActive(true);
@@ -332,16 +358,48 @@ public class BattleManager : MonoBehaviour {
             gameOverObject.SetActive(true);
         }
 
-        Invoke(nameof(ReturnTitle), 3.0f);
+        yield return RankAdjustment(isGameClear);
+
+        yield return new WaitForSeconds(3);
+        // ゲームを再読み込み
+        SceneManager.LoadScene("GameScene");
     }
 
-    private void ReturnTitle() {
-        SceneManager.LoadScene("GameScene");
+    private Coroutine RankAdjustment(bool isGameClear) {
+        int rankId = NetworkManager.Instance.UserRankId;
+        int rankPoint = NetworkManager.Instance.UserRankPoint;
+        if(isGameClear) {
+            rankPoint += 10 * playerManager.battleLife;
+
+            if(rankPoint >= 100 && rankId < 7) {
+                rankPoint -= 100;
+                rankId++;
+            }
+        }
+        else {
+            rankPoint -= 30 / playerManager.battleLife;
+            if(rankPoint < 0 && rankId > 1) {
+                rankPoint = 100 - rankPoint;
+                rankId--;
+            }
+            else if(rankPoint < 0 && rankId == 1) {
+                rankPoint = 0;
+            }
+        }
+
+        return StartCoroutine(NetworkManager.Instance.UpdateUser(NetworkManager.Instance.UserName,
+            rankId,
+            rankPoint,
+            result => {
+                if (!result) {
+                    Debug.Log("ユーザー情報更新が正常に終了しませんでした。");
+                }
+            }));
     }
 
     private void Update() {
         if (isGameClear || isGameOver) {
-            Invoke(nameof(GameSet), 3.0f);
+            StartCoroutine(GameSet());
         }
 
         if (!isBattleStart) {
@@ -350,18 +408,41 @@ public class BattleManager : MonoBehaviour {
 
         time += Time.deltaTime;
 
+        suddenDeathTimer += Time.deltaTime;
+        energyTimer += Time.deltaTime;
+        poisonTimer += Time.deltaTime;
+        sleepTimer += Time.deltaTime;
+        stunTimer += Time.deltaTime;
 
-        // Energy自然回復 5秒ごと
-        if ((time % 5 >= 0) && (time % 5 <= 1 / (float)Application.targetFrameRate)) {
-            EnergyUp();
+
+        // サドンデス 30秒ごと
+        if (suddenDeathTimer >= 30f) {
+            suddenDeathTimer = 0;
+
+            AddSystemBattleLog("<color=red>!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!</color>");
+            AddSystemBattleLog("<color=red>サドンデス</color>");
+            AddSystemBattleLog("<color=red>!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!</color>");
+            isSuddenDeath = true;
+            suddenDeathValue += 2;
+            playerManager.atk *= suddenDeathValue;
+            enemyManager.atk *= suddenDeathValue;
+        }
+
+        // Energy自然回復 3秒ごと
+        if (energyTimer >= 3f) {
+            energyTimer = 0;
+            if (!isSuddenDeath) {
+                EnergyUp();
+            }
         }
 
         // 毒の処理 1秒ごと
-        if ((time % 1 >= 0) && (time % 1 <= 1 / (float)Application.targetFrameRate)) {
+        if (poisonTimer >= 1f) {
+            poisonTimer = 0f;
             // プレイヤー
             if(playerManager.poison > 0) {
                 playerManager.poison--;
-                playerManager.hp -= 1.0f;
+                playerManager.hp -= 1.0f * suddenDeathValue;
 
                 AddBattleLog("<color=#02FF00><sprite name=poison>のダメージを受けた</color>", true);
             }
@@ -369,8 +450,36 @@ public class BattleManager : MonoBehaviour {
             // 敵
             if (enemyManager.poison > 0) {
                 enemyManager.poison--;
-                enemyManager.hp -= 1.0f;
+                enemyManager.hp -= 1.0f * suddenDeathValue;
                 AddBattleLog("<color=#02FF00><sprite name=poison>のダメージを受けた</color>", false);
+            }
+        }
+
+        // 睡眠の処理 1秒ごと
+        if (sleepTimer >= 1f) {
+            sleepTimer = 0;
+            // プレイヤー
+            if (playerManager.sleep > 0) {
+                playerManager.sleep--;
+            }
+
+            // 敵
+            if (enemyManager.sleep > 0) {
+                enemyManager.sleep--;
+            }
+        }
+
+        // 麻痺の処理 1秒ごと
+        if (stunTimer >= 1f) {
+            stunTimer = 0f;
+            // プレイヤー
+            if (playerManager.stun > 0) {
+                playerManager.stun--;
+            }
+
+            // 敵
+            if (enemyManager.stun > 0) {
+                enemyManager.stun--;
             }
         }
 
@@ -420,7 +529,7 @@ public class BattleManager : MonoBehaviour {
 
             playerManager.winCount++;
 
-            float addMoney = 12 * (((float)playerManager.currentRound / 10) + 1.2f);
+            float addMoney = 8 * (((float)playerManager.currentRound / 10) + 1.2f);
 
             playerManager.money += Mathf.RoundToInt(addMoney);
 
@@ -438,7 +547,7 @@ public class BattleManager : MonoBehaviour {
 
             playerManager.battleLife--;
 
-            float addMoney = 10 * (((float)playerManager.currentRound / 10) + 1.2f);
+            float addMoney = 6 * (((float)playerManager.currentRound / 10) + 1.2f);
 
             playerManager.money += Mathf.RoundToInt(addMoney);
 
@@ -583,7 +692,14 @@ public class BattleManager : MonoBehaviour {
         else if (!isPlayer) {
             battleLogText.text += "<align=\"right\">" + text + "  :" + time.ToString("f1") + "s</align>\n";
         }
-        scrollRect.verticalNormalizedPosition = -1;
+        scrollRect.verticalNormalizedPosition = 0;
+        battleLogText.GetComponent<ContentSizeFitter>().SetLayoutVertical();
+    }
+
+    // システムバトルログ
+    public void AddSystemBattleLog(string text) {
+        battleLogText.text += "<align=\"center\">" + text + "</align>\n";
+        scrollRect.verticalNormalizedPosition = 0;
         battleLogText.GetComponent<ContentSizeFitter>().SetLayoutVertical();
     }
 
@@ -592,9 +708,11 @@ public class BattleManager : MonoBehaviour {
         switch (playerManager.characterType) {
             case CharacterManager.CHARACTER_TYPE.Warrior:
                 playerCharacters[0].SetActive(true);
+                playerCharacters[1].SetActive(false);
                 break;
 
             case CharacterManager.CHARACTER_TYPE.Tank:
+                playerCharacters[0].SetActive(false);
                 playerCharacters[1].SetActive(true);
                 break;
         }
@@ -605,9 +723,11 @@ public class BattleManager : MonoBehaviour {
         switch (enemyManager.characterType) {
             case CharacterManager.CHARACTER_TYPE.Warrior:
                 enemyCharacters[0].SetActive(true);
+                enemyCharacters[1].SetActive(false);
                 break;
 
             case CharacterManager.CHARACTER_TYPE.Tank:
+                enemyCharacters[0].SetActive(false);
                 enemyCharacters[1].SetActive(true);
                 break;
         }

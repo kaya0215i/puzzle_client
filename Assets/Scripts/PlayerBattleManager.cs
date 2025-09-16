@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerManager : CharacterManager {
+public class PlayerBattleManager : CharacterManager {
     public int money;
     private int maxBattleLife = 3;
     public int battleLife;
@@ -11,13 +11,15 @@ public class PlayerManager : CharacterManager {
     public int rerollCount;
 
     private void Start() {
-
-        name = "Player";
         isPlayer = true;
         currentRound = 1;
         rerollCount = 0;
         battleLife = maxBattleLife;
         money = 10;
+    }
+
+    public void SetName(string name) {
+        this.name = name;
     }
 
     public void AllReset() {

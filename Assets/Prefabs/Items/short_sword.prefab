@@ -100,7 +100,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 5
   name: "\u77ED\u5263"
-  isAttack: 1
+  isWeapon: 1
   amount: 2
   energyUp: 0
   energyCost: 1.5

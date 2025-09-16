@@ -100,12 +100,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 10
   name: "\u6728\u76FE"
-  isAttack: 0
+  isWeapon: 0
   amount: 1
   energyUp: 0
   energyCost: 0
-  cooltime: 2
-  descriptionText: "2\u79D2\u3054\u3068\u306B\u30A2\u30FC\u30DE\u30FC\u30921\u7372\u5F97 "
+  cooltime: 6
+  descriptionText: "6\u79D2\u3054\u3068\u306B\u30A2\u30FC\u30DE\u30FC\u30921\u7372\u5F97 "
   price: 3
 --- !u!114 &2719710284026140852
 MonoBehaviour:

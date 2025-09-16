@@ -12,7 +12,7 @@ public class PieceManager : MonoBehaviour {
     // [0] => N, [1], => E, [2] => S, [3] => W
     public bool[] dentDirections;
     public int pieceFormId;
-    public int weaponAndItemNum;
+    public int itemNum;
     public Quaternion pieceAngle;
 
     public int indexNum;
@@ -36,7 +36,7 @@ public class PieceManager : MonoBehaviour {
 
     private PieceInfo pieceInfo;
 
-    private PlayerManager playerManager;
+    private PlayerBattleManager playerManager;
 
     private void Awake() {
         setupManager = GameObject.Find("SetupManager").GetComponent<SetupManager>();
@@ -55,7 +55,7 @@ public class PieceManager : MonoBehaviour {
     }
 
     private void Start() {
-        playerManager = GameObject.Find("PlayerManager").GetComponent<PlayerManager>();
+        playerManager = GameObject.Find("PlayerManager").GetComponent<PlayerBattleManager>();
     }
 
     private void Update() {

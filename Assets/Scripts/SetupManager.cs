@@ -15,7 +15,7 @@ public class SetupManager : MonoBehaviour {
     [SerializeField] public PieceManager nullPieceObject;
 
     // プレイヤーマネージャー
-    [SerializeField] private PlayerManager playerManager;
+    [SerializeField] private PlayerBattleManager playerManager;
 
     // ピースを動かしているかどうか
     private bool isMovePiece;
@@ -110,7 +110,7 @@ public class SetupManager : MonoBehaviour {
 
                     // 説明を表示
                     PieceInfo hitPieceInfo = hitPiece.transform.GetChild(0).GetComponent<PieceInfo>();
-                    bool isAttack = hitPieceInfo.isAttack;
+                    bool isAttack = hitPieceInfo.isWeapon;
 
                     pieceInfoPanel.SetActive(true);
 
@@ -256,7 +256,7 @@ public class SetupManager : MonoBehaviour {
                     FieldPieceList[i].indexNum = i;
                     break;
                 }
-                if (j == InventoryPieceList.Count - 1) {
+                else if (j == InventoryPieceList.Count - 1) {
                     FieldPieceList[i] = nullPieceObject;
                     FieldPieceList[i].indexNum = -1;
                 }
@@ -331,7 +331,7 @@ public class SetupManager : MonoBehaviour {
 
         Camera.main.transform.position = new Vector3(15, 0, -10);
 
-        battleManager.Init();
+        StartCoroutine(battleManager.Init());   
     }
 
     // マネーテキスト更新

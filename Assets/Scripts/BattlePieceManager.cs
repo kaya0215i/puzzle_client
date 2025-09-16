@@ -8,7 +8,7 @@ using static PieceInfo;
 public class BattlePieceManager : MonoBehaviour {
     private PieceInfo pieceInfo;
     private BattleManager battleManager;
-    private PlayerManager playerManager;
+    private PlayerBattleManager playerManager;
 
     [NonSerialized] public int index = -1;
 
@@ -16,6 +16,7 @@ public class BattlePieceManager : MonoBehaviour {
     [NonSerialized] public float energyUp;
     [NonSerialized] public float energyCost;
     [NonSerialized] public float cooltime;
+    [NonSerialized] public bool isWeapon;
 
     public enum IsWhoPiece {
         None,
@@ -28,7 +29,7 @@ public class BattlePieceManager : MonoBehaviour {
     private void Awake() {
         pieceInfo = GetComponent<PieceInfo>();
         battleManager = GameObject.Find("BattleManager").GetComponent<BattleManager>();
-        playerManager = GameObject.Find("PlayerManager").GetComponent<PlayerManager>();
+        playerManager = GameObject.Find("PlayerManager").GetComponent<PlayerBattleManager>();
     }
 
     public void SetStatus() {
@@ -36,6 +37,7 @@ public class BattlePieceManager : MonoBehaviour {
         this.energyUp = pieceInfo.energyUp;
         this.energyCost = pieceInfo.energyCost;
         this.cooltime = pieceInfo.cooltime;
+        this.isWeapon = pieceInfo.isWeapon;
     }
 
     public IEnumerator Action(CharacterManager attacker, CharacterManager target) {
@@ -51,7 +53,7 @@ public class BattlePieceManager : MonoBehaviour {
             }
 
             if (attacker.energy < energyCost) {
-                battleManager.AddBattleLog("<color=red>エネルギーが足りない...</color> ( " + pieceInfo.name + " )", attacker.isPlayer);
+                battleManager.AddBattleLog("<color=#FF8000>エネルギーが足りない...</color> ( " + pieceInfo.name + " )", attacker.isPlayer);
                 continue;
             }
 
@@ -208,7 +210,7 @@ public class BattlePieceManager : MonoBehaviour {
                 case 18:
                     // 左
                     if (index % 7 != 0) {
-                        if (battleManager.playerBattlePieceManager[index - 1].CompareTag("Weapon")) {
+                        if (battleManager.playerBattlePieceManager[index - 1].isWeapon) {
                             if (attacker.isPlayer) {
                                 battleManager.playerBattlePieceManager[index - 1].amount *= amount;
                             }
@@ -219,7 +221,7 @@ public class BattlePieceManager : MonoBehaviour {
                     }
                     // 右
                     if ((index + 1) % 7 != 0) {
-                        if (battleManager.playerBattlePieceManager[index - 1].CompareTag("Weapon")) {
+                        if (battleManager.playerBattlePieceManager[index - 1].isWeapon) {
                             if (attacker.isPlayer) {
                                 battleManager.playerBattlePieceManager[index + 1].amount *= amount;
                             }
@@ -230,7 +232,7 @@ public class BattlePieceManager : MonoBehaviour {
                     }
                     // 上
                     if (!((42 <= index) && (index <= 48))) {
-                        if (battleManager.playerBattlePieceManager[index - 1].CompareTag("Weapon")) {
+                        if (battleManager.playerBattlePieceManager[index - 1].isWeapon) {
                             if (attacker.isPlayer) {
                                 battleManager.playerBattlePieceManager[index + 7].amount *= amount;
                             }
@@ -241,7 +243,7 @@ public class BattlePieceManager : MonoBehaviour {
                     }
                     // 下
                     if (!((0 <= index) && (index <= 6))) {
-                        if (battleManager.playerBattlePieceManager[index - 1].CompareTag("Weapon")) {
+                        if (battleManager.playerBattlePieceManager[index - 1].isWeapon) {
                             if (attacker.isPlayer) {
                                 battleManager.playerBattlePieceManager[index - 7].amount *= amount;
                             }
@@ -294,7 +296,7 @@ public class BattlePieceManager : MonoBehaviour {
                         }
                     }
 
-                    break;
+                    yield break;
 
                 // 毒龍
                 case 20:

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyManager : CharacterManager {
+public class EnemyBattleManager : CharacterManager {
     private void Start() {
         isPlayer = false;
     }

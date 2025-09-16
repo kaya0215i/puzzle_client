@@ -6,7 +6,7 @@ public class PieceInfo : MonoBehaviour {
 
     public int id;
     public new string name;
-    public bool isAttack;
+    public bool isWeapon;
     public float amount;
     public float energyUp;
     public float energyCost;

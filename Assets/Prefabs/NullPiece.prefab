@@ -48,7 +48,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dentDirections: 00000000
   pieceFormId: 0
-  weaponAndItemNum: 0
+  itemNum: 0
   pieceAngle: {x: 0, y: 0, z: 0, w: 1}
   indexNum: -1
   isChainedFirstPiece: 0
@@ -134,7 +134,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: -1
   name: Null
-  isAttack: 0
+  isWeapon: 0
   amount: 0
   energyUp: 0
   energyCost: 0

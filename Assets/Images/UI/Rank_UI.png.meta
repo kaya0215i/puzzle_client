@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: a8fe35ded485b05428283aa28cd47318
+guid: 537bbb56a4fc568439b57167bf941486
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -123,13 +123,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: btn_title 1_0
+      name: Rank_UI_0
       rect:
         serializedVersion: 2
-        x: 52
-        y: 280
-        width: 300
-        height: 150
+        x: 29
+        y: 28
+        width: 131
+        height: 171
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -137,20 +137,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 25f66603eeeeb7f4b989e6919ebd8d96
-      internalID: -797017910
+      spriteID: f22ff66351f2bce4b83beb35cd8a2332
+      internalID: -48139219
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: btn_title 1_1
+      name: Rank_UI_1
       rect:
         serializedVersion: 2
-        x: 480
-        y: 280
-        width: 300
-        height: 150
+        x: 168
+        y: 29
+        width: 127
+        height: 173
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -158,20 +158,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 73562fbb1c66008499577eb95650e1f5
-      internalID: 742957626
+      spriteID: 782a2938d2a84004b9853b34bbd7c1e7
+      internalID: 187794970
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: btn_title 1_2
+      name: Rank_UI_2
       rect:
         serializedVersion: 2
-        x: 52
-        y: 72
-        width: 300
-        height: 150
+        x: 301
+        y: 26
+        width: 133
+        height: 181
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -179,20 +179,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: c106820a4474bcf438599ec2d0bebd1d
-      internalID: 78410114
+      spriteID: cb665a46819a4ee458f3e83aa2d5281b
+      internalID: 1657210535
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: btn_title 1_3
+      name: Rank_UI_3
       rect:
         serializedVersion: 2
-        x: 484
-        y: 68
-        width: 301
-        height: 161
+        x: 441
+        y: 27
+        width: 135
+        height: 182
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -200,8 +200,71 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: a284b11985441464c9e45df40b4e38f8
-      internalID: -13479578
+      spriteID: e7a37a1a527b7864e9a9aeeb1057ef72
+      internalID: 1622929316
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Rank_UI_4
+      rect:
+        serializedVersion: 2
+        x: 584
+        y: 29
+        width: 147
+        height: 195
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bbe6a375372902644afa49b66a7a877e
+      internalID: -671380994
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Rank_UI_5
+      rect:
+        serializedVersion: 2
+        x: 739
+        y: 31
+        width: 135
+        height: 184
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 831662a6add58ab408678b4ddc74d0ec
+      internalID: 775398943
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Rank_UI_6
+      rect:
+        serializedVersion: 2
+        x: 877
+        y: 30
+        width: 134
+        height: 188
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1b46a6b815ba7a74bba605a952883f38
+      internalID: -1050237826
       vertices: []
       indices: 
       edges: []
@@ -217,10 +280,13 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      btn_title 1_0: -797017910
-      btn_title 1_1: 742957626
-      btn_title 1_2: 78410114
-      btn_title 1_3: -13479578
+      Rank_UI_0: -48139219
+      Rank_UI_1: 187794970
+      Rank_UI_2: 1657210535
+      Rank_UI_3: 1622929316
+      Rank_UI_4: -671380994
+      Rank_UI_5: 775398943
+      Rank_UI_6: -1050237826
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

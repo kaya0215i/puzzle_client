@@ -100,7 +100,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 3
   name: "\u30CF\u30F3\u30DE\u30FC"
-  isAttack: 1
+  isWeapon: 1
   amount: 7
   energyUp: 0
   energyCost: 5
