@@ -192,9 +192,87 @@ public class NetworkManager : MonoBehaviour {
             Debug.Log("フィールド情報を取得出来ませんでした");
             string resultJson = "{\r\n  \"name\": \"BOT\",\r\n  \"character_type\": \"Warrior\",\r\n  \"index\": [\r\n    24,\r\n  ],\r\n  \"item_id\": [\r\n    1,\r\n  ],\r\n  \"piece_id\": [\r\n    5,\r\n  ],\r\n  \"piece_angle\": [\r\n    {\r\n      \"x\": 0,\r\n      \"y\": 0,\r\n      \"z\": 0,\r\n      \"w\": 1\r\n    }\r\n  ]\r\n}";
             EnemyFieldDataResponse response = JsonConvert.DeserializeObject<EnemyFieldDataResponse>(resultJson);
-            Debug.Log(response.CharacterType);
             result?.Invoke(response);
         }
+    }
+
+    // フレンド情報取得
+    public IEnumerator GetFriendData(Action<UserFriendResponse> result) {
+        // フレンド情報取得APIを実行
+        UnityWebRequest request = UnityWebRequest.Get(
+            API_BASE_URL + "friends/index");
+        request.SetRequestHeader("Authorization", "Bearer " + this.apiToken);
+
+        yield return request.SendWebRequest();
+
+        if (request.result == UnityWebRequest.Result.Success && request.responseCode == 200) {
+            // 通信が成功した場合、返ってきたJSONをオブジェクトに変換
+            string resultJson = request.downloadHandler.text;
+            UserFriendResponse response = JsonConvert.DeserializeObject<UserFriendResponse>(resultJson);
+            result?.Invoke(response);
+        }
+        else {
+            result?.Invoke(null);
+        }
+    }
+
+    // フレンドリクエストを表示
+    public IEnumerator GetFriendRequestData(Action<UserFriendResponse> result) {
+        // フレンドリクエスト情報取得APIを実行
+        UnityWebRequest request = UnityWebRequest.Get(
+            API_BASE_URL + "friends/getArrivedFriendRequests");
+        request.SetRequestHeader("Authorization", "Bearer " + this.apiToken);
+
+        yield return request.SendWebRequest();
+
+        if (request.result == UnityWebRequest.Result.Success && request.responseCode == 200) {
+            // 通信が成功した場合、返ってきたJSONをオブジェクトに変換
+            string resultJson = request.downloadHandler.text;
+            if(resultJson.Length > 2) {
+                UserFriendResponse response = JsonConvert.DeserializeObject<UserFriendResponse>(resultJson);
+                result?.Invoke(response);
+            }
+            else {
+                result?.Invoke(null);
+            }
+        }
+        else {
+            result?.Invoke(null);
+        }
+    }
+
+    // フレンドリクエストを送信
+    public IEnumerator SendFriendRequest(string userName, Action<bool> result) {
+        // フレンドリクエスト情報取得APIを実行
+        UnityWebRequest request = UnityWebRequest.Get(
+            API_BASE_URL + "friends/sendFriendRequest/" + userName);
+        request.SetRequestHeader("Authorization", "Bearer " + this.apiToken);
+
+        yield return request.SendWebRequest();
+
+        bool isSuccess = false;
+        if (request.result == UnityWebRequest.Result.Success && request.responseCode == 200) {
+            isSuccess = true;
+        }
+
+        result?.Invoke(isSuccess);
+    }
+
+    // フレンドリクエストを承認
+    public IEnumerator AcceptFriendRequest(string userName, Action<bool> result) {
+        // フレンドリクエスト情報取得APIを実行
+        UnityWebRequest request = UnityWebRequest.Get(
+            API_BASE_URL + "friends/acceptFriendRequest/" + userName);
+        request.SetRequestHeader("Authorization", "Bearer " + this.apiToken);
+
+        yield return request.SendWebRequest();
+
+        bool isSuccess = false;
+        if (request.result == UnityWebRequest.Result.Success && request.responseCode == 200) {
+            isSuccess = true;
+        }
+
+        result?.Invoke(isSuccess);
     }
 
     // ユーザーTokenを保存する
