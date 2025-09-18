@@ -161,6 +161,7 @@ public class TitleManager : MonoBehaviour {
         }
 
         setupManager.TitleInit();
+
         Camera.main.transform.position = new Vector3(0, 0, -10);
     }
 

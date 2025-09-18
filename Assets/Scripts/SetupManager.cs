@@ -195,9 +195,10 @@ public class SetupManager : MonoBehaviour {
         SetListPiece();
     }
 
+    // ƒŠƒ[ƒ‹”»’è
     private bool RerollJudgment() {
         bool isReroll = false;
-        int tmp = 1 + (int)(playerManager.rerollCount * 0.1f) + (playerManager.currentRound - 1);
+        int tmp = 1 + (int)(playerManager.rerollCount * 0.2f);
 
         if (playerManager.money >= tmp) {
             playerManager.rerollCount++;

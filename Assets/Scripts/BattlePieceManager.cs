@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using static PieceInfo;
+using static UnityEngine.GraphicsBuffer;
 
 public class BattlePieceManager : MonoBehaviour {
     private PieceInfo pieceInfo;
@@ -55,7 +56,7 @@ public class BattlePieceManager : MonoBehaviour {
             case 12:
                 attacker.shield += amount;
                 battleManager.AddBattleLog("シールドを" + amount + "獲得した (" + pieceInfo.name + " )", attacker.isPlayer);
-
+                ActionAnimation();
                 break;
         }
 
@@ -354,6 +355,8 @@ public class BattlePieceManager : MonoBehaviour {
                     break;
             }
 
+            StartCoroutine(ActionAnimation());
+
             // ステータス調整
             StatusAdjustment(attacker);
         }
@@ -390,5 +393,29 @@ public class BattlePieceManager : MonoBehaviour {
         }
 
         return isHit;
+    }
+
+    // 行動アニメーション
+    private IEnumerator ActionAnimation() {
+
+        Vector3 originalScale = this.transform.localScale;
+        Vector3 targetScale = originalScale * 1.5f;
+
+        float time = 0f;
+        while (time < 0.1f) {
+            this.transform.localScale = Vector3.Lerp(originalScale, targetScale, time / 1.1f);
+            time += Time.deltaTime;
+            yield return null;
+        }
+        this.transform.localScale = targetScale;
+
+        time = 0f;
+        while (time < 0.1f) {
+            this.transform.localScale = Vector3.Lerp(targetScale, originalScale, time / 1.1f);
+            time += Time.deltaTime;
+            yield return null;
+        }
+        this.transform.localScale = originalScale;
+
     }
 }

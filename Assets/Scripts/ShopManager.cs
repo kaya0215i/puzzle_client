@@ -74,7 +74,7 @@ public class ShopManager : MonoBehaviour {
         GameObject createdRerollPriceCard = Instantiate(priceCardPrefab, new Vector2(2.37f, 3.9f), Quaternion.identity, priceCardParend);
 
         Text rerollPriceText = createdRerollPriceCard.transform.GetChild(0).GetComponent<Text>();
-        rerollPriceText.text = "" + ( 1 + (int)(playerManager.rerollCount * 0.1f) + (playerManager.currentRound - 1));
+        rerollPriceText.text = "" + ( 1 + (int)(playerManager.rerollCount * 0.2f));
     }
 
     // ÉsÅ[ÉXçÏê¨

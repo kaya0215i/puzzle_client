@@ -202,6 +202,8 @@ public class BattleManager : MonoBehaviour {
 
         battleLogText.text = "";
 
+        playerManager.rerollCount = 0;
+
         // サーバーから受け取るプレイヤーデータ
         EnemyFieldDataResponse enemyDataResponse = new EnemyFieldDataResponse();
 
@@ -349,22 +351,39 @@ public class BattleManager : MonoBehaviour {
         enabled = false;
         yield return new WaitForSeconds(3);
 
+
+        gameSetPanel.SetActive(true);
         if (isGameClear) {
-            gameSetPanel.SetActive(true);
-            gameClearObject.SetActive(true);
+            yield return StartCoroutine(ShowGameSetPanelAnimation(gameClearObject.transform));
         }
         else if (isGameOver) {
-            gameSetPanel.SetActive(true);
-            gameOverObject.SetActive(true);
+            yield return StartCoroutine(ShowGameSetPanelAnimation(gameClearObject.transform));
         }
 
         yield return RankAdjustment(isGameClear);
 
         yield return new WaitForSeconds(3);
         // ゲームを再読み込み
-        SceneManager.LoadScene("GameScene");
+        Initiate.Fade("GameScene", Color.black, 0.5f);
     }
 
+    // ゲームセットパネルを表示するアニメーション
+    private IEnumerator ShowGameSetPanelAnimation(Transform target) {
+        target.gameObject.SetActive(true);
+        Vector3 initialScale = target.transform.localScale;
+        target.transform.localScale = Vector3.zero;
+        float elapsed = 0f;
+
+        while (elapsed < 1.5f) {
+            target.transform.localScale = Vector3.Lerp(Vector3.zero, initialScale, elapsed / 1.5f);
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        target.transform.localScale = initialScale;
+    }
+
+    // ランク調整
     private Coroutine RankAdjustment(bool isGameClear) {
         int rankId = NetworkManager.Instance.UserRankId;
         int rankPoint = NetworkManager.Instance.UserRankPoint;
@@ -486,28 +505,32 @@ public class BattleManager : MonoBehaviour {
 
         // Hpが0になったら
         if (playerManager.hp <= 0) {
-            EndBattle(false);
+            isBattleStart = false;
+            StopAllCoroutines();
+            StartCoroutine(EndBattle(false));
         }
         else if (enemyManager.hp <= 0) {
-            EndBattle(true);
+            isBattleStart = false;
+            StopAllCoroutines();
+            StartCoroutine(EndBattle(true));
         }
     }
 
     // バトルが終わったら
-    private void EndBattle(bool playerWin) {
-        StopAllCoroutines();
-
+    private IEnumerator EndBattle(bool playerWin) {
         // リザルト表示
+        yield return StartCoroutine(ShowResultPanelAnimation());
         ShowResult(playerWin);
 
         if(isGameClear || isGameOver) {
-            return ;
+            yield break;
         }
-
-        isBattleStart = false;
+        
         enabled = false;
 
-        Invoke(nameof(ReturnSetup), 3.0f);
+        yield return new WaitForSeconds(3);
+
+        ReturnSetup();
     }
 
     private void ReturnSetup() {
@@ -519,8 +542,6 @@ public class BattleManager : MonoBehaviour {
 
     // リザルト表示
     private void ShowResult(bool playerWin) {
-        battleResultPanel.SetActive(true);
-
         if(playerWin) {
             victoryObject.SetActive(true);
             defeatObject.SetActive(false);
@@ -557,6 +578,22 @@ public class BattleManager : MonoBehaviour {
                 isGameOver = true;
             }
         }
+    }
+
+    // リザルトパネルを表示するアニメーション
+    private IEnumerator ShowResultPanelAnimation() {
+        battleResultPanel.SetActive(true);
+        Vector3 initialScale = battleResultPanel.transform.localScale;
+        battleResultPanel.transform.localScale = Vector3.zero;
+        float elapsed = 0f;
+
+        while (elapsed < 1.5f) {
+            battleResultPanel.transform.localScale = Vector3.Lerp(Vector3.zero, initialScale, elapsed / 1.5f);
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        battleResultPanel.transform.localScale = initialScale;
     }
 
     // トロフィーを獲得するアニメーション
