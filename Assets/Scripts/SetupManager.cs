@@ -84,12 +84,6 @@ public class SetupManager : MonoBehaviour {
         sellAreaObject.SetActive(false);
 
         enabled = false;
-
-        // 初期ピースを配置
-        GameObject createdPiece = shopManager.CreatePiece(pieceParent, CanPutPiecePosList[24], Quaternion.identity, true, 0);
-        createdPiece.GetComponent<PieceManager>().InitFirstPiece();
-
-        SetListPiece();
     }
 
     private void Update() {
@@ -288,6 +282,15 @@ public class SetupManager : MonoBehaviour {
         return Vector3.Distance(a, b) < tolerance;
     }
 
+    // 初期ピースの配置
+    private void SetFirstPiece() {
+        // 初期ピースを配置
+        GameObject createdPiece = shopManager.CreatePiece(pieceParent, CanPutPiecePosList[24], Quaternion.identity, true, 0);
+        createdPiece.GetComponent<PieceManager>().InitFirstPiece();
+
+        SetListPiece();
+    }
+
     // セットアップに戻る
     public void Init() {
         shopManager.SortShop();
@@ -313,6 +316,8 @@ public class SetupManager : MonoBehaviour {
 
         shopManager.SortShop();
         battleManager.SetBattlePlayerCharacter();
+
+        SetFirstPiece();
     }
 
     // バトルスタートボタン

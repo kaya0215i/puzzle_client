@@ -81,6 +81,7 @@ public class ShopManager : MonoBehaviour {
     public GameObject CreatePiece(Transform parent, Vector3 position, Quaternion pieceAngle, bool isPlayer, int itemNum = -1, int pieceFormNum = -1) {
         int rnd = UnityEngine.Random.Range(0, 0);
 
+        // ピースを作成
         GameObject pieceObject = Instantiate(shopPieces, position, pieceAngle, parent);
 
         PieceManager pieceManager = pieceObject.GetComponent<PieceManager>();
@@ -94,9 +95,21 @@ public class ShopManager : MonoBehaviour {
 
         pieceManager.itemNum = num + 1;
 
+        // アイテムを作成
         GameObject pieceItems = Instantiate(itemPrefabs[num], pieceObject.transform.position, pieceObject.transform.rotation, pieceObject.transform);
+        // アイテム情報を設定
+        PieceInfo pieceInfo = pieceItems.GetComponent<PieceInfo>();
+        pieceInfo.id = ItemDataSO.Instance.itemDataList[num].id;
+        pieceInfo.name = ItemDataSO.Instance.itemDataList[num].name;
+        pieceInfo.isWeapon = ItemDataSO.Instance.itemDataList[num].isWeapon;
+        pieceInfo.amount = ItemDataSO.Instance.itemDataList[num].amount;
+        pieceInfo.energyUp = ItemDataSO.Instance.itemDataList[num].energyUp;
+        pieceInfo.energyCost = ItemDataSO.Instance.itemDataList[num].energyCost;
+        pieceInfo.cooltime = ItemDataSO.Instance.itemDataList[num].cooltime;
+        pieceInfo.descriptionText = ItemDataSO.Instance.itemDataList[num].descriptionText;
+        pieceInfo.price = ItemDataSO.Instance.itemDataList[num].price;
 
-        if(isPlayer) {
+        if (isPlayer) {
             pieceItems.GetComponent<BattlePieceManager>().isWhoPiece = BattlePieceManager.IsWhoPiece.Player;
         }
         else if (!isPlayer) {

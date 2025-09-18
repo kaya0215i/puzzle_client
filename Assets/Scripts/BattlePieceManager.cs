@@ -45,6 +45,20 @@ public class BattlePieceManager : MonoBehaviour {
             yield break;
         }
 
+        // 盾は最初に一度行動
+        switch (pieceInfo.id) {
+            // 木盾
+            case 10:
+            // 銅盾
+            case 11:
+            // 鉄盾
+            case 12:
+                attacker.shield += amount;
+                battleManager.AddBattleLog("シールドを" + amount + "獲得した (" + pieceInfo.name + " )", attacker.isPlayer);
+
+                break;
+        }
+
         while (true) {
             yield return new WaitForSeconds(cooltime);
 

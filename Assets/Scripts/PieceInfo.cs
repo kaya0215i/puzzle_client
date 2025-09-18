@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class PieceInfo : MonoBehaviour {
-
     public int id;
     public new string name;
     public bool isWeapon;

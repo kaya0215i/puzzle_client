@@ -100,8 +100,6 @@ public class TitleManager : MonoBehaviour {
 
         // サーバーと通信
         UserDataComm();
-
-
     }
 
     // キャラクター変更ボタン左
@@ -369,6 +367,31 @@ public class TitleManager : MonoBehaviour {
 
     // サーバーと通信
     public void UserDataComm() {
+        // アイテムデータを取得
+        ItemDataSO.Instance.itemDataList = new List<ItemData>();
+        StartCoroutine(NetworkManager.Instance.GetItemData(
+            result => {
+                if (result != null) {
+                    foreach (ItemDataResponse item in result) {
+                        if (item != null) {
+                            ItemData itemData = new ItemData() {
+                                id = item.id,
+                                name = item.name,
+                                isWeapon = item.isWeapon,
+                                amount = item.amount,
+                                energyUp = item.energyUp,
+                                energyCost = item.energyCost,
+                                cooltime = item.cooltime,
+                                descriptionText = item.descriptionText,
+                                price = item.price,
+                            };
+                            
+                            ItemDataSO.Instance.itemDataList.Add(itemData);
+                        }
+                    }
+                }
+            }));
+
         bool isSuccess = NetworkManager.Instance.LoadUserData();
         if (isSuccess) {
             titleUICanvas.SetActive(true);

@@ -275,6 +275,25 @@ public class NetworkManager : MonoBehaviour {
         result?.Invoke(isSuccess);
     }
 
+    // アイテムデータを取得
+    public IEnumerator GetItemData(Action<List<ItemDataResponse>> result) {
+        // アイテムデータ取得APIを実行
+        UnityWebRequest request = UnityWebRequest.Get(
+            API_BASE_URL + "items/index");
+
+        yield return request.SendWebRequest();
+
+        if (request.result == UnityWebRequest.Result.Success && request.responseCode == 200) {
+            // 通信が成功した場合、返ってきたJSONをオブジェクトに変換
+            string resultJson = request.downloadHandler.text;
+            ItemDataRoot response = JsonConvert.DeserializeObject<ItemDataRoot>(resultJson);
+            List<ItemDataResponse> itemDate = response.data;
+            result?.Invoke(itemDate);
+        }
+
+        result?.Invoke(null);
+    }
+
     // ユーザーTokenを保存する
     private void SaveUserData() {
         SaveData saveData = new SaveData();

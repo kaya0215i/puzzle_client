@@ -431,9 +431,7 @@ public class BattleManager : MonoBehaviour {
         // Energy自然回復 3秒ごと
         if (energyTimer >= 3f) {
             energyTimer = 0;
-            if (!isSuddenDeath) {
-                EnergyUp();
-            }
+            EnergyUp();
         }
 
         // 毒の処理 1秒ごと
@@ -442,7 +440,7 @@ public class BattleManager : MonoBehaviour {
             // プレイヤー
             if(playerManager.poison > 0) {
                 playerManager.poison--;
-                playerManager.hp -= 1.0f * suddenDeathValue;
+                playerManager.hp -= 0.3f * suddenDeathValue;
 
                 AddBattleLog("<color=#02FF00><sprite name=poison>のダメージを受けた</color>", true);
             }
@@ -450,7 +448,7 @@ public class BattleManager : MonoBehaviour {
             // 敵
             if (enemyManager.poison > 0) {
                 enemyManager.poison--;
-                enemyManager.hp -= 1.0f * suddenDeathValue;
+                enemyManager.hp -= 0.3f * suddenDeathValue;
                 AddBattleLog("<color=#02FF00><sprite name=poison>のダメージを受けた</color>", false);
             }
         }
@@ -669,8 +667,14 @@ public class BattleManager : MonoBehaviour {
 
     // Energy自然回復
     private void EnergyUp() {
-        playerManager.energy += 1.0f;
-        enemyManager.energy += 1.0f;
+        if (!isSuddenDeath) {
+            playerManager.energy += 1.0f;
+            enemyManager.energy += 1.0f;
+        }
+        else {
+            playerManager.energy += 2.0f;
+            enemyManager.energy += 2.0f;
+        }
     }
 
     // バトルログ表示, 非表示トグル
