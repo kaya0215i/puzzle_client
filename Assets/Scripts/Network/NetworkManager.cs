@@ -3,7 +3,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using UnityEditor.PackageManager.Requests;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -12,7 +11,7 @@ public class NetworkManager : MonoBehaviour {
 #if DEBUG
     const string API_BASE_URL = "http://localhost:8000/api/";
 #else
-    const string API_BASE_URL = "";
+    const string API_BASE_URL = "http://localhost:8000/api/";
 #endif
 
     private string apiToken; // 自分のAPIToken
@@ -208,6 +207,7 @@ public class NetworkManager : MonoBehaviour {
         if (request.result == UnityWebRequest.Result.Success && request.responseCode == 200) {
             // 通信が成功した場合、返ってきたJSONをオブジェクトに変換
             string resultJson = request.downloadHandler.text;
+            Debug.Log(resultJson);
             UserFriendResponse response = JsonConvert.DeserializeObject<UserFriendResponse>(resultJson);
             result?.Invoke(response);
         }
@@ -228,7 +228,8 @@ public class NetworkManager : MonoBehaviour {
         if (request.result == UnityWebRequest.Result.Success && request.responseCode == 200) {
             // 通信が成功した場合、返ってきたJSONをオブジェクトに変換
             string resultJson = request.downloadHandler.text;
-            if(resultJson.Length > 2) {
+            Debug.Log(resultJson);
+            if (resultJson.Length > 2) {
                 UserFriendResponse response = JsonConvert.DeserializeObject<UserFriendResponse>(resultJson);
                 result?.Invoke(response);
             }

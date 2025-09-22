@@ -357,7 +357,7 @@ public class BattleManager : MonoBehaviour {
             yield return StartCoroutine(ShowGameSetPanelAnimation(gameClearObject.transform));
         }
         else if (isGameOver) {
-            yield return StartCoroutine(ShowGameSetPanelAnimation(gameClearObject.transform));
+            yield return StartCoroutine(ShowGameSetPanelAnimation(gameOverObject.transform));
         }
 
         yield return RankAdjustment(isGameClear);
@@ -395,8 +395,8 @@ public class BattleManager : MonoBehaviour {
                 rankId++;
             }
         }
-        else {
-            rankPoint -= 30 / playerManager.battleLife;
+        else if(isGameOver) {
+            rankPoint -= 30;
             if(rankPoint < 0 && rankId > 1) {
                 rankPoint = 100 - rankPoint;
                 rankId--;
@@ -676,29 +676,29 @@ public class BattleManager : MonoBehaviour {
 
         // “Å
         if(playerManager.poison > 0) {
-            playerStatusText.text = "<sprite name=poison> " + playerManager.poison;
+            playerStatusText.text += "<sprite name=poison> " + playerManager.poison + "\n";
         }
 
         if(enemyManager.poison > 0) {
-            enemyStatusText.text = "<sprite name=poison> " + enemyManager.poison;
+            enemyStatusText.text += "<sprite name=poison> " + enemyManager.poison + "\n";
         }
 
         // –ƒáƒ
         if (playerManager.stun > 0) {
-            playerStatusText.text = "<sprite name=stun> " + playerManager.stun;
+            playerStatusText.text += "<sprite name=stun> " + playerManager.stun + "\n";
         }
 
         if (enemyManager.stun > 0) {
-            enemyStatusText.text = "<sprite name=stun> " + enemyManager.stun;
+            enemyStatusText.text += "<sprite name=stun> " + enemyManager.stun + "\n";
         }
 
         // ‡–°
         if (playerManager.sleep > 0) {
-            playerStatusText.text = "<sprite name=sleep> " + playerManager.sleep;
+            playerStatusText.text += "<sprite name=sleep> " + playerManager.sleep + "\n";
         }
 
         if (enemyManager.sleep > 0) {
-            enemyStatusText.text = "<sprite name=sleep> " + enemyManager.sleep;
+            enemyStatusText.text += "<sprite name=sleep> " + enemyManager.sleep + "\n";
         }
     }
 

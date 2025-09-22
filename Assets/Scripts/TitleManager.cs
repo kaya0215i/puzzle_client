@@ -262,7 +262,6 @@ public class TitleManager : MonoBehaviour {
 
                         text.text += result.RankPoint[i] + " : ";
                         text.text += result.Name[i];
-                        Debug.Log(result.Name[i]);
 
                         // フレンドリクエスト許可ボタン設定
                         int index = i;
