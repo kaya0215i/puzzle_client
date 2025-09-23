@@ -35,13 +35,25 @@ public class ShopManager : MonoBehaviour {
     // プライスカードの親オブジェクト
     [SerializeField] private Transform priceCardParend;
 
+    // ロックのプレハブ
+    [SerializeField] private GameObject padLockPrefab;
+
     // プレイヤーマネージャー
     [SerializeField] private PlayerBattleManager playerManager;
 
     public void SortShop() {
+        List<PieceManager> lockedPieceList = new List<PieceManager>();
+
         // ショップの親オブジェクトを空にする
         foreach (Transform child in shopParent) {
-            Destroy(child.gameObject);
+            PieceManager pieceManager = child.GetComponent<PieceManager>();
+
+            if (!pieceManager.isLock) {
+                Destroy(child.gameObject);
+            }
+            else {
+                lockedPieceList.Add(pieceManager);
+            }
         }
 
         // プライスカードの親オブジェクトを空にする
@@ -50,6 +62,7 @@ public class ShopManager : MonoBehaviour {
         }
 
         // ショップの親オブジェクトに入れる
+        int index = 0;
         foreach (Vector2 pos in shopPiecePosList) {
             int rnd = UnityEngine.Random.Range(0, 0);
             float rndX = UnityEngine.Random.Range(-0.15f, 0.15f);
@@ -57,10 +70,28 @@ public class ShopManager : MonoBehaviour {
 
             Vector2 shopPos = new Vector2(pos.x + rndX, pos.y + rndY);
 
+            bool isContinue = false;
+
+            foreach (PieceManager lockedPiece in lockedPieceList) {
+                if(index == lockedPiece.shopIndex) {
+                    isContinue = true;
+                    break;
+                }
+            }
+
+            if (isContinue) {
+                if (index == 4) {
+                    break;
+                }
+                index++;
+                continue;
+            }
+
             // ピース作成
             PieceManager createdPiece = CreatePiece(shopParent, shopPos, Quaternion.identity, true).GetComponent<PieceManager>();
             createdPiece.inShop = true;
             createdPiece.shopPos = shopPos;
+            createdPiece.shopIndex = index;
 
             // プライスカードの作成
             Vector2 priceCardPos = new Vector2(createdPiece.shopPos.x, createdPiece.shopPos.y - 0.5f);
@@ -68,6 +99,12 @@ public class ShopManager : MonoBehaviour {
 
             Text priceText = createdPriceCard.transform.GetChild(0).GetComponent<Text>();
             priceText.text = "" + createdPiece.transform.GetChild(0).GetComponent<PieceInfo>().price;
+
+            // ロックオブジェクトの作成
+            Vector2 lockeObjectPos = new Vector2(createdPiece.shopPos.x + 0.27f, createdPiece.shopPos.y + 0.355f);
+            Instantiate(padLockPrefab, lockeObjectPos, Quaternion.identity, createdPiece.transform);
+
+            index++;
         }
 
         // リロール用プライスカードの作成
@@ -75,6 +112,15 @@ public class ShopManager : MonoBehaviour {
 
         Text rerollPriceText = createdRerollPriceCard.transform.GetChild(0).GetComponent<Text>();
         rerollPriceText.text = "" + ( 1 + (int)(playerManager.rerollCount * 0.2f));
+
+        foreach(PieceManager pieceManager in lockedPieceList) {
+            // プライスカードの作成
+            Vector2 priceCardPos = new Vector2(pieceManager.shopPos.x, pieceManager.shopPos.y - 0.5f);
+            GameObject createdPriceCard = Instantiate(priceCardPrefab, priceCardPos, Quaternion.identity, priceCardParend);
+
+            Text priceText = createdPriceCard.transform.GetChild(0).GetComponent<Text>();
+            priceText.text = "" + pieceManager.transform.GetChild(0).GetComponent<PieceInfo>().price;
+        }
     }
 
     // ピース作成

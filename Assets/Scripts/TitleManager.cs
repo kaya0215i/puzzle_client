@@ -104,7 +104,7 @@ public class TitleManager : MonoBehaviour {
         AudioManager.Instance.ChangeBGM("TitleBGM");
 
         // サーバーと通信
-        UserDataComm();
+        StartCoroutine(UserDataComm());
     }
 
     // キャラクター変更ボタン左
@@ -376,6 +376,7 @@ public class TitleManager : MonoBehaviour {
        result => {     // 登録終了後の処理
            if (result == true) {
                OnClickCloceButton(optionUICavas);
+               playerManager.name = changeNameText.text;
            }
            else {
                Debug.Log("ユーザー情報更新が正常に終了しませんでした。");
@@ -401,7 +402,7 @@ public class TitleManager : MonoBehaviour {
     }
 
     // サーバーと通信
-    public void UserDataComm() {
+    public IEnumerator UserDataComm() {
         // アイテムデータを取得
         ItemDataSO.Instance.itemDataList = new List<ItemData>();
         StartCoroutine(NetworkManager.Instance.GetItemData(
@@ -429,8 +430,7 @@ public class TitleManager : MonoBehaviour {
 
         bool isSuccess = NetworkManager.Instance.LoadUserData();
         if (isSuccess) {
-            titleUICanvas.SetActive(true);
-            GetUserData();
+            yield return GetUserData();
         }
         else {
             //ユーザーデータが保存されてない場合は登録
@@ -447,8 +447,6 @@ public class TitleManager : MonoBehaviour {
                nameText.text,           // 名前
           result => {                          // 登録終了後の処理
               if (result == true) {
-                  titleUICanvas.SetActive(true);
-                  inputUICanvas.SetActive(false);
                   GetUserData();
               }
               else {
@@ -459,8 +457,8 @@ public class TitleManager : MonoBehaviour {
     }
 
     // ユーザー情報取得
-    private void GetUserData() {
-        StartCoroutine(NetworkManager.Instance.GetUserData(
+    private Coroutine GetUserData() {
+        return StartCoroutine(NetworkManager.Instance.GetUserData(
             result => {
                 if(result == true) {
                     Debug.Log("ユーザー名 : " + NetworkManager.Instance.UserName +
@@ -469,6 +467,8 @@ public class TitleManager : MonoBehaviour {
 
                     playerManager.SetName(NetworkManager.Instance.UserName);
                     UpdateRankText();
+                    titleUICanvas.SetActive(true);
+                    inputUICanvas.SetActive(false);
                 }
                 else {
                     Debug.Log("ユーザーを取得出来ませんでした");

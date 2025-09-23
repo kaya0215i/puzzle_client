@@ -59,6 +59,8 @@ MonoBehaviour:
   firstPiece: 0
   isSell: 0
   inShop: 0
+  shopIndex: 0
+  isLock: 0
   shopPos: {x: 0, y: 0}
 --- !u!50 &-7348027308078074049
 Rigidbody2D:

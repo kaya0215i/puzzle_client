@@ -28,6 +28,11 @@ public class PieceManager : MonoBehaviour {
     public bool isSell;
 
     public bool inShop;
+
+    public int shopIndex;
+
+    public bool isLock;
+
     public Vector2 shopPos = Vector2.zero;
 
     private Rigidbody2D myRb;
@@ -49,6 +54,7 @@ public class PieceManager : MonoBehaviour {
         isSet = false;
         firstPiece = false;
         isSell = false;
+        isLock = false;
 
         myRb = this.gameObject.GetComponent<Rigidbody2D>();
         mySpriteRenderer = this.gameObject.GetComponent<SpriteRenderer>();
@@ -206,6 +212,13 @@ public class PieceManager : MonoBehaviour {
 
             inShop = false;
             this.gameObject.transform.parent = setupManager.pieceParent;
+
+            isLock = false;
+            foreach(Transform child in gameObject.transform) {
+                if (child.CompareTag("PadLock")) {
+                    Destroy(child.gameObject);
+                }
+            }
 
             AudioManager.Instance.PlayOneShot("BuyPiece");
         }

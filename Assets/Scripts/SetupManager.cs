@@ -95,10 +95,6 @@ public class SetupManager : MonoBehaviour {
                     pieceManager = hitPiece.GetComponent<PieceManager>();
                     pieceManager.OnClick();
 
-                    if (!pieceManager.inShop && !pieceManager.firstPiece) {
-                        sellAreaObject.SetActive(true);
-                    }
-
                     // 説明を表示
                     PieceInfo hitPieceInfo = hitPiece.transform.GetChild(0).GetComponent<PieceInfo>();
                     bool isAttack = hitPieceInfo.isWeapon;
@@ -133,6 +129,14 @@ public class SetupManager : MonoBehaviour {
                         mouseClickPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                         ropeRb = hitPiece.GetComponent<Rigidbody2D>();
                     }
+                    else if (hitPiece.CompareTag("Lock")) {
+                        PadLockManager padLockManager = hitPiece.GetComponentInParent<PadLockManager>();
+                        padLockManager.OnChangeLock();
+                    }
+                    else if (hitPiece.CompareTag("UnLock")) {
+                        PadLockManager padLockManager = hitPiece.GetComponentInParent<PadLockManager>();
+                        padLockManager.OnChangeLock();
+                    }
 
                     // 説明を非表示
                     pieceInfoPanel.SetActive(false);
@@ -152,6 +156,10 @@ public class SetupManager : MonoBehaviour {
                 // ピースの回転処理
                 if (Input.GetMouseButtonDown(1)) {
                     pieceManager.Rotate();
+                }
+
+                if (!pieceManager.inShop && !pieceManager.firstPiece) {
+                    sellAreaObject.SetActive(true);
                 }
             }
             else if (isMoveRope) {
@@ -216,13 +224,12 @@ public class SetupManager : MonoBehaviour {
         foreach (RaycastHit2D hit2d in Physics2D.RaycastAll(worldPoint, Vector2.zero)) {
             // 当たり判定あり
             if (hit2d) {
-                //Debug.Log(hit2d.collider.gameObject.name);
+                Debug.Log(hit2d.collider.gameObject.name);
 
-                if (hit2d.collider.gameObject.CompareTag("Piece")) {
-                    ret = hit2d.collider.gameObject;
-                    break;
-                }
-                if (hit2d.collider.gameObject.CompareTag("Rope")) {
+                if (hit2d.collider.gameObject.CompareTag("Piece") ||
+                    hit2d.collider.gameObject.CompareTag("Rope") ||
+                    hit2d.collider.gameObject.CompareTag("Lock") ||
+                    hit2d.collider.gameObject.CompareTag("UnLock")) {
                     ret = hit2d.collider.gameObject;
                     break;
                 }

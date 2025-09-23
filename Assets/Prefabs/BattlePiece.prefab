@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 334635101558183929}
   - component: {fileID: 8345812589976912327}
   - component: {fileID: 5578501460403007189}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: BattlePiece
   m_TagString: Piece
   m_Icon: {fileID: 0}
@@ -97,4 +97,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf775796260b1db45be71df9cb3a0641, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dentDirections: 
+  isWhoPiece: 0

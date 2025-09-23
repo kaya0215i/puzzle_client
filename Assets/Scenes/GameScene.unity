@@ -1297,6 +1297,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: d16f211867bda3f46862329fc4e3d4fe, type: 3}
   priceCardPrefab: {fileID: 4817566663317603335, guid: 10468bfbab7118940a5a55cbde364ea9, type: 3}
   priceCardParend: {fileID: 1232470113}
+  padLockPrefab: {fileID: 4394273284986083008, guid: 6e74780ee0cf2ff4abef8d204d23024f, type: 3}
   playerManager: {fileID: 752580629}
 --- !u!1 &212694612
 GameObject:
