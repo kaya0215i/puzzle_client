@@ -355,6 +355,8 @@ public class BattlePieceManager : MonoBehaviour {
                     break;
             }
 
+            AudioManager.Instance.PlayOneShot("Attack");
+
             StartCoroutine(ActionAnimation());
 
             // ステータス調整

@@ -5,6 +5,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using UnityEngine.UIElements;
 using static CharacterManager;
 using static System.Net.Mime.MediaTypeNames;
 
@@ -32,6 +33,9 @@ public class TitleManager : MonoBehaviour {
 
     // 名前入力
     [SerializeField] private UnityEngine.UI.Text nameText;
+
+    //名前変更用親
+    [SerializeField] private InputField changeNameParent;
 
     // 名前変更用プレイスホルダー
     [SerializeField] private UnityEngine.UI.Text changeNamePlaceholder;
@@ -97,6 +101,7 @@ public class TitleManager : MonoBehaviour {
         currentCharacterIndex = 0;
         UpdateCharacterInfoText();
 
+        AudioManager.Instance.ChangeBGM("TitleBGM");
 
         // サーバーと通信
         UserDataComm();
@@ -104,6 +109,8 @@ public class TitleManager : MonoBehaviour {
 
     // キャラクター変更ボタン左
     public void OnClickCharacterChangeBtnLeft() {
+        AudioManager.Instance.PlayOneShot("Button");
+
         currentCharacterIndex --;
 
         if(currentCharacterIndex < 0) {
@@ -123,6 +130,8 @@ public class TitleManager : MonoBehaviour {
 
     // キャラクター変更ボタン右
     public void OnClickCharacterChangeBtnRight() {
+        AudioManager.Instance.PlayOneShot("Button");
+
         currentCharacterIndex++;
 
         if (currentCharacterIndex > characterObjects.Length - 1) {
@@ -142,12 +151,16 @@ public class TitleManager : MonoBehaviour {
 
     // スタートボタン
     public void OnClickStartButton() {
+        AudioManager.Instance.PlayOneShot("Button");
+
         titleUICanvas.SetActive(false);
         characterSelectUICanvas.SetActive(true);
     }
 
     // ゲームスタートスタートボタン
     public void OnClickGameStartButton() {
+        AudioManager.Instance.PlayOneShot("Button");
+
         characterSelectUICanvas.SetActive(false);
 
         switch (currentCharacterIndex) {
@@ -167,13 +180,18 @@ public class TitleManager : MonoBehaviour {
 
     // フレンドボタン
     public void OnClickFriendButton() {
+        AudioManager.Instance.PlayOneShot("Button");
+
         titleUICanvas.SetActive(false);
         friendUICanvas.SetActive(true);
 
         OnClickFriendListButton();
     }
+
     // フレンドリストボタン
     public void OnClickFriendListButton() {
+        AudioManager.Instance.PlayOneShot("Button");
+
         friendText.text = "";
 
         friendList.SetActive(true);
@@ -216,9 +234,11 @@ public class TitleManager : MonoBehaviour {
             }));
     }
 
-    // フレンドリストリクエストリストボタン
+    // フレンドリスト リクエストリストボタン
     public void OnClicFriendRequestListButton() {
-        foreach(Transform child in friendRequestParent) {
+        AudioManager.Instance.PlayOneShot("Button");
+
+        foreach (Transform child in friendRequestParent) {
             Destroy(child.gameObject);
         }
 
@@ -266,7 +286,7 @@ public class TitleManager : MonoBehaviour {
                         // フレンドリクエスト許可ボタン設定
                         int index = i;
 
-                        Button acceptBtn = obj.GetComponentInChildren<Button>();
+                        UnityEngine.UI.Button acceptBtn = obj.GetComponentInChildren<UnityEngine.UI.Button>();
                         acceptBtn.onClick.AddListener(() => {
                             OnClickFriendRequestAcceptButton(result.Name[index]);
                             Destroy(obj.gameObject);
@@ -278,6 +298,8 @@ public class TitleManager : MonoBehaviour {
 
     // フレンドリクエスト承認ボタン
     public void OnClickFriendRequestAcceptButton(string userName) {
+        AudioManager.Instance.PlayOneShot("Button");
+
         StartCoroutine(NetworkManager.Instance.AcceptFriendRequest(
             userName,
             result => {
@@ -292,6 +314,8 @@ public class TitleManager : MonoBehaviour {
 
     // プレイヤー検索ボタン
     public void OnClickPlayerSearch() {
+        AudioManager.Instance.PlayOneShot("Button");
+
         friendList.SetActive(false);
         friendRequestList.SetActive(false);
         playerSearch.SetActive(true);
@@ -301,7 +325,9 @@ public class TitleManager : MonoBehaviour {
 
     // フレンドリクエスト送信ボタン
     public void OnClickSendFriendRequestButton() {
-        if(playerSearchText.text.Length < 4) {
+        AudioManager.Instance.PlayOneShot("Button");
+
+        if (playerSearchText.text.Length < 4) {
             systemMessageText.text = "<color=red>4文字以上で入力してください。</color>";
         }
 
@@ -320,23 +346,30 @@ public class TitleManager : MonoBehaviour {
 
     // オプションボタン
     public void OnClickOptionButton() {
+        AudioManager.Instance.PlayOneShot("Button");
+
         titleUICanvas.SetActive(false);
         optionUICavas.SetActive(true);
 
-        changeNameText.text = "";
+        changeNameParent.text = "";
         changeNamePlaceholder.text = NetworkManager.Instance.UserName;
     }
 
     // クローズボタン
     public void OnClickCloceButton(GameObject obj) {
+        AudioManager.Instance.PlayOneShot("Button");
+
         obj.SetActive(false);
         titleUICanvas.SetActive(true);
     }
 
     // 名前変更ボタン
     public void OnClickChangeNameButton() {
-        // ユーザーデータを更新して画面も更新
-        StartCoroutine(NetworkManager.Instance.UpdateUser(
+        AudioManager.Instance.PlayOneShot("Button");
+        if (changeNameText.text.Length >= 4) {
+
+            // ユーザーデータを更新して画面も更新
+            StartCoroutine(NetworkManager.Instance.UpdateUser(
             changeNameText.text,       // 名前
             NetworkManager.Instance.UserRankId, // ランクID
             NetworkManager.Instance.UserRankPoint, // ランクポイント
@@ -348,10 +381,12 @@ public class TitleManager : MonoBehaviour {
                Debug.Log("ユーザー情報更新が正常に終了しませんでした。");
            }
        }));
+        }
     }
 
     // やめるボタン
     public void OnClickQuitButton() {
+        AudioManager.Instance.PlayOneShot("Button");
         UnityEngine.Application.Quit();
     }
 
@@ -405,7 +440,9 @@ public class TitleManager : MonoBehaviour {
 
     // ユーザー登録
     public void RegistUser() {
-        if(nameText.text.Length > 4) {
+        AudioManager.Instance.PlayOneShot("Button");
+
+        if (nameText.text.Length >= 4) {
             StartCoroutine(NetworkManager.Instance.RegistUser(
                nameText.text,           // 名前
           result => {                          // 登録終了後の処理
@@ -475,5 +512,15 @@ public class TitleManager : MonoBehaviour {
         }
 
         rankText.text += rankPoint;
+    }
+
+    // BGMボリューム変更
+    public void OnvalueChangedBGMValumeSslider(UnityEngine.UI.Slider slider) {
+        AudioManager.Instance.ChangeBGMValume(slider.value);
+    }
+
+    // SEボリューム変更
+    public void OnvalueChangedSEValumeSslider(UnityEngine.UI.Slider slider) {
+        AudioManager.Instance.ChangeSEValume(slider.value);
     }
 }

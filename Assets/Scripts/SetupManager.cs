@@ -180,6 +180,7 @@ public class SetupManager : MonoBehaviour {
                     if (mouseDis > 1.3f) {
                         if (RerollJudgment()) {
                             shopManager.SortShop();
+                            AudioManager.Instance.PlayOneShot("RerollShop");
                         }
                     }
                 }
@@ -301,6 +302,8 @@ public class SetupManager : MonoBehaviour {
 
         UpdateMoney();
         playerManager.currentRound++;
+
+        AudioManager.Instance.ChangeBGM("SetupBGM");
     }
 
     // タイトルから
@@ -316,10 +319,14 @@ public class SetupManager : MonoBehaviour {
         battleManager.SetBattlePlayerCharacter();
 
         SetFirstPiece();
+
+        AudioManager.Instance.ChangeBGM("SetupBGM");
     }
 
     // バトルスタートボタン
     public void OnStartBattleButton() {
+        AudioManager.Instance.PlayOneShot("Button");
+
         foreach(PieceManager piece in FieldPieceList) {
             piece.pieceAngle = piece.transform.rotation;
         }

@@ -163,6 +163,7 @@ public class PieceManager : MonoBehaviour {
                 this.gameObject.layer = 6;
                 mySpriteRenderer.sortingLayerName = "SetObject";
                 isSet = true;
+                AudioManager.Instance.PlayOneShot("PieceSet");
             }
             else {
                 inField = false;
@@ -197,6 +198,7 @@ public class PieceManager : MonoBehaviour {
             pieceInfo = this.transform.GetChild(0).GetComponent<PieceInfo>();
             if (pieceInfo.price > playerManager.money) {
                 ReleaseClick();
+                AudioManager.Instance.PlayOneShot("CantBuyPiece");
                 return;
             }
 
@@ -204,6 +206,8 @@ public class PieceManager : MonoBehaviour {
 
             inShop = false;
             this.gameObject.transform.parent = setupManager.pieceParent;
+
+            AudioManager.Instance.PlayOneShot("BuyPiece");
         }
         else {
             isSell = false;
@@ -315,6 +319,8 @@ public class PieceManager : MonoBehaviour {
             return;
         }
         if (!isRotate) {
+            AudioManager.Instance.PlayOneShot("RotatePiece");
+
             isRotate = true;
 
             StartCoroutine(rt());
@@ -362,6 +368,8 @@ public class PieceManager : MonoBehaviour {
             Destroy(this.gameObject);
 
             setupManager.SetListPiece();
+
+            AudioManager.Instance.PlayOneShot("SellPiece");
         }
     }
 

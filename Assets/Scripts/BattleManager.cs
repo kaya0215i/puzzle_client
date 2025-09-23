@@ -308,7 +308,11 @@ public class BattleManager : MonoBehaviour {
 
         UIUpdate();
 
+        AudioManager.Instance.PlayOneShot("StartBattle");
+
         yield return new WaitForSeconds(3);
+
+        AudioManager.Instance.ChangeBGM("BattleBGM");
 
         StartBattle();
     }
@@ -519,6 +523,8 @@ public class BattleManager : MonoBehaviour {
     // バトルが終わったら
     private IEnumerator EndBattle(bool playerWin) {
         // リザルト表示
+        AudioManager.Instance.PlayOneShot("EndBattle");
+
         yield return StartCoroutine(ShowResultPanelAnimation());
         ShowResult(playerWin);
 
@@ -716,7 +722,9 @@ public class BattleManager : MonoBehaviour {
 
     // バトルログ表示, 非表示トグル
     public void ToggleOnValueChanged() {
-        if(battleLogToggle.isOn) {
+        AudioManager.Instance.PlayOneShot("BattleLogButton");
+
+        if (battleLogToggle.isOn) {
             battleLog.SetActive(true);
         }
         else if(!battleLogToggle.isOn) {

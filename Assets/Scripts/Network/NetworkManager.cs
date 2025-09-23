@@ -208,8 +208,13 @@ public class NetworkManager : MonoBehaviour {
             // 通信が成功した場合、返ってきたJSONをオブジェクトに変換
             string resultJson = request.downloadHandler.text;
             Debug.Log(resultJson);
-            UserFriendResponse response = JsonConvert.DeserializeObject<UserFriendResponse>(resultJson);
-            result?.Invoke(response);
+            if (resultJson.Length > 2) {
+                UserFriendResponse response = JsonConvert.DeserializeObject<UserFriendResponse>(resultJson);
+                result?.Invoke(response);
+            }
+            else {
+                result?.Invoke(null);
+            }
         }
         else {
             result?.Invoke(null);
