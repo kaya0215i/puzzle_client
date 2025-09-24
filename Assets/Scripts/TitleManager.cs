@@ -34,6 +34,18 @@ public class TitleManager : MonoBehaviour {
     // フレンドUI
     [SerializeField] private GameObject friendUICanvas;
 
+    // 遊び方UI
+    [SerializeField] private GameObject howtoUICanvas;
+
+    // 遊び方ページオブジェクト
+    [SerializeField] private GameObject[] howtoObjects;
+
+    // 遊び方ページ番号テキスト
+    [SerializeField] private UnityEngine.UI.Text howtoNumText;
+
+    // 現在の遊び方ページのインデックス
+    private int currentHowtoPageIndex;
+
     // 名前入力
     [SerializeField] private UnityEngine.UI.Text nameText;
 
@@ -95,6 +107,7 @@ public class TitleManager : MonoBehaviour {
         friendList.SetActive(false);
         friendRequestList.SetActive(false);
         playerSearch.SetActive(false);
+        howtoUICanvas.SetActive(false);
 
         for (int i = 0; i < characterObjects.Length; i++) {
             if(i == 0) {
@@ -105,6 +118,7 @@ public class TitleManager : MonoBehaviour {
         }
 
         currentCharacterIndex = 0;
+        currentHowtoPageIndex = 0;
         UpdateCharacterInfoText();
 
         AudioManager.Instance.ChangeBGM("TitleBGM");
@@ -411,6 +425,43 @@ public class TitleManager : MonoBehaviour {
                Debug.Log("ユーザー情報更新が正常に終了しませんでした。");
            }
        }));
+        }
+    }
+
+    // 遊び方ボタン
+    public void OnClickHowtoButton() {
+        titleUICanvas.SetActive(false);
+        howtoUICanvas.SetActive(true);
+
+        howtoObjects[currentHowtoPageIndex].SetActive(true);
+        howtoNumText.text = (currentHowtoPageIndex + 1) + "/3";
+    }
+
+    // 遊び方ページ切替左
+    public void OnClickHowtoPageChangeLeft() {
+        if(currentHowtoPageIndex > 0) {
+            currentHowtoPageIndex--;
+
+            foreach(GameObject obj in howtoObjects) {
+                obj.SetActive(false);
+            }
+
+            howtoObjects[currentHowtoPageIndex].SetActive(true);
+            howtoNumText.text = (currentHowtoPageIndex + 1) + "/3";
+        }
+    }
+
+    // 遊び方ページ切替右
+    public void OnClickHowtoPageChangeRight() {
+        if (currentHowtoPageIndex < 2) {
+            currentHowtoPageIndex++;
+
+            foreach (GameObject obj in howtoObjects) {
+                obj.SetActive(false);
+            }
+
+            howtoObjects[currentHowtoPageIndex].SetActive(true);
+            howtoNumText.text = (currentHowtoPageIndex + 1) + "/3";
         }
     }
 
