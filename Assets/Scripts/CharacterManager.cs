@@ -25,6 +25,7 @@ public class CharacterManager : MonoBehaviour {
         None,
         Warrior,
         Tank,
+        Thief,
     }
 
     public void StatusReset() {
@@ -46,9 +47,23 @@ public class CharacterManager : MonoBehaviour {
             case CHARACTER_TYPE.Tank:
                 maxHp = 32.0f;
                 hp = maxHp;
-                atk = 0.9f;
-                spd = 0.9f;
+                atk = 0.8f;
+                spd = 0.8f;
                 maxEnergy = 12.0f;
+                energy = maxEnergy;
+                shield = 0.0f;
+                poison = 0;
+                stun = 0;
+                sleep = 0;
+
+                break;
+
+            case CHARACTER_TYPE.Thief:
+                maxHp = 20.0f;
+                hp = maxHp;
+                atk = 0.75f;
+                spd = 1.6f;
+                maxEnergy = 8.0f;
                 energy = maxEnergy;
                 shield = 0.0f;
                 poison = 0;

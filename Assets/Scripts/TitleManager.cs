@@ -171,6 +171,10 @@ public class TitleManager : MonoBehaviour {
             case 1:
                 playerManager.characterType = CHARACTER_TYPE.Tank;
                 break;
+
+            case 2:
+                playerManager.characterType = CHARACTER_TYPE.Thief;
+                break;
         }
 
         setupManager.TitleInit();
@@ -393,11 +397,18 @@ public class TitleManager : MonoBehaviour {
 
     // キャラクター情報更新
     private void UpdateCharacterInfoText() {
-        if (currentCharacterIndex == 0) {
-            characterInfoText.text = "<b><color=red>戦士</color></b>\n\nバランスのとれたステータス";
-        }
-        else if(currentCharacterIndex == 1) {
-            characterInfoText.text = "<b><color=red>守護士</color></b>\n\n体力とエネルギーが多いが攻撃とスピードが低い";
+        switch (currentCharacterIndex) {
+            case 0:
+                characterInfoText.text = "<b><color=red>戦士</color></b>\n\nバランスのとれたステータス";
+                break;
+
+            case 1:
+                characterInfoText.text = "<b><color=red>守護士</color></b>\n\n体力とエネルギーが多いが攻撃とスピードが低い";
+                break;
+
+            case 2:
+                characterInfoText.text = "<b><color=red>盗賊</color></b>\n\nスピードが早くコインを多くもらえるが体力と攻撃力が低い";
+                break;
         }
     }
 

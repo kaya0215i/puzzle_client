@@ -12,6 +12,7 @@ public class NetworkManager : MonoBehaviour {
     const string API_BASE_URL = "http://localhost:8000/api/";
 #else
     const string API_BASE_URL = "http://localhost:8000/api/";
+    //const string API_BASE_URL = "ge202409.japaneast.cloudapp.azure.com/api/";
 #endif
 
     private string apiToken; // Ž©•ª‚ÌAPIToken

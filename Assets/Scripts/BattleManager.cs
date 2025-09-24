@@ -282,11 +282,19 @@ public class BattleManager : MonoBehaviour {
             case CharacterManager.CHARACTER_TYPE.Warrior:
                 playerVSCharacters[0].SetActive(true);
                 playerVSCharacters[1].SetActive(false);
+                playerVSCharacters[2].SetActive(false);
                 break;
 
             case CharacterManager.CHARACTER_TYPE.Tank:
                 playerVSCharacters[0].SetActive(false);
                 playerVSCharacters[1].SetActive(true);
+                playerVSCharacters[2].SetActive(false);
+                break;
+
+            case CharacterManager.CHARACTER_TYPE.Thief:
+                playerVSCharacters[0].SetActive(false);
+                playerVSCharacters[1].SetActive(false);
+                playerVSCharacters[2].SetActive(true);
                 break;
         }
 
@@ -295,11 +303,19 @@ public class BattleManager : MonoBehaviour {
             case CharacterManager.CHARACTER_TYPE.Warrior:
                 enemyVSCharacters[0].SetActive(true);
                 enemyVSCharacters[1].SetActive(false);
+                enemyVSCharacters[2].SetActive(false);
                 break;
 
             case CharacterManager.CHARACTER_TYPE.Tank:
                 enemyVSCharacters[0].SetActive(false);
                 enemyVSCharacters[1].SetActive(true);
+                enemyVSCharacters[2].SetActive(false);
+                break;
+
+            case CharacterManager.CHARACTER_TYPE.Thief:
+                enemyVSCharacters[0].SetActive(false);
+                enemyVSCharacters[1].SetActive(false);
+                enemyVSCharacters[2].SetActive(true);
                 break;
         }
 
@@ -556,6 +572,10 @@ public class BattleManager : MonoBehaviour {
 
             float addMoney = 8 * (((float)playerManager.currentRound / 10) + 1.2f);
 
+            if (playerManager.characterType == CharacterManager.CHARACTER_TYPE.Thief) {
+                addMoney += 2 + ((float)playerManager.currentRound / 2);
+            }
+
             playerManager.money += Mathf.RoundToInt(addMoney);
 
             // トロフィーを獲得するアニメーション
@@ -573,6 +593,10 @@ public class BattleManager : MonoBehaviour {
             playerManager.battleLife--;
 
             float addMoney = 6 * (((float)playerManager.currentRound / 10) + 1.2f);
+
+            if(playerManager.characterType == CharacterManager.CHARACTER_TYPE.Thief) {
+                addMoney += 1 + ((float)playerManager.currentRound / 2);
+            }
 
             playerManager.money += Mathf.RoundToInt(addMoney);
 
@@ -758,11 +782,19 @@ public class BattleManager : MonoBehaviour {
             case CharacterManager.CHARACTER_TYPE.Warrior:
                 playerCharacters[0].SetActive(true);
                 playerCharacters[1].SetActive(false);
+                playerCharacters[2].SetActive(false);
                 break;
 
             case CharacterManager.CHARACTER_TYPE.Tank:
                 playerCharacters[0].SetActive(false);
                 playerCharacters[1].SetActive(true);
+                playerCharacters[2].SetActive(false);
+                break;
+
+            case CharacterManager.CHARACTER_TYPE.Thief:
+                playerCharacters[0].SetActive(false);
+                playerCharacters[1].SetActive(false);
+                playerCharacters[2].SetActive(true);
                 break;
         }
     }
@@ -773,11 +805,19 @@ public class BattleManager : MonoBehaviour {
             case CharacterManager.CHARACTER_TYPE.Warrior:
                 enemyCharacters[0].SetActive(true);
                 enemyCharacters[1].SetActive(false);
+                enemyCharacters[2].SetActive(false);
                 break;
 
             case CharacterManager.CHARACTER_TYPE.Tank:
                 enemyCharacters[0].SetActive(false);
                 enemyCharacters[1].SetActive(true);
+                enemyCharacters[2].SetActive(false);
+                break;
+
+            case CharacterManager.CHARACTER_TYPE.Thief:
+                enemyCharacters[0].SetActive(false);
+                enemyCharacters[1].SetActive(false);
+                enemyCharacters[2].SetActive(true);
                 break;
         }
     }
