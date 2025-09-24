@@ -303,7 +303,7 @@ public class NetworkManager : MonoBehaviour {
 
     // ÉÜÅ[ÉUÅ[TokenÇï€ë∂Ç∑ÇÈ
     private void SaveUserData() {
-        SaveData saveData = new SaveData();
+        TokenData saveData = new TokenData();
         saveData.APIToken = this.APIToken;
         string json = JsonConvert.SerializeObject(saveData);
         var writer = new StreamWriter(Application.persistentDataPath + "/saveData.json");
@@ -320,7 +320,7 @@ public class NetworkManager : MonoBehaviour {
         var reader = new StreamReader(Application.persistentDataPath + "/saveData.json");
         string json = reader.ReadToEnd();
         reader.Close();
-        SaveData saveData = JsonConvert.DeserializeObject<SaveData>(json);
+        TokenData saveData = JsonConvert.DeserializeObject<TokenData>(json);
         this.apiToken = saveData.APIToken;
         return true;
     }

@@ -16,6 +16,9 @@ public class TitleManager : MonoBehaviour {
     // プレイヤーマネージャー
     [SerializeField] private PlayerBattleManager playerManager;
 
+    // データマネージャー
+    [SerializeField] private DataManager dataManager;
+
     // UI
     [SerializeField] private GameObject titleUICanvas;
 
@@ -79,6 +82,9 @@ public class TitleManager : MonoBehaviour {
     // システムメッセージテキスト
     [SerializeField] private UnityEngine.UI.Text systemMessageText;
 
+    // 続きからボタン
+    [SerializeField] private UnityEngine.UI.Button continueButton;
+
     private void Start() {
         Camera.main.transform.position = new Vector3(-15, 0, -10);
         titleUICanvas.SetActive(false);
@@ -105,6 +111,13 @@ public class TitleManager : MonoBehaviour {
 
         // サーバーと通信
         StartCoroutine(UserDataComm());
+
+        continueButton.gameObject.SetActive(false);
+
+        // 中断データがあるか
+        if (dataManager.ExistsInterruptedData()) {
+            continueButton.gameObject.SetActive(true);
+        }
     }
 
     // キャラクター変更ボタン左
@@ -178,6 +191,18 @@ public class TitleManager : MonoBehaviour {
         }
 
         setupManager.TitleInit();
+
+        Camera.main.transform.position = new Vector3(0, 0, -10);
+    }
+
+    // 続きからボタン
+    public void OnClickStartInterruptionDataButton() {
+        AudioManager.Instance.PlayOneShot("Button");
+
+        characterSelectUICanvas.SetActive(false);
+        titleUICanvas.SetActive(false);
+
+        setupManager.StartInterruptionData();
 
         Camera.main.transform.position = new Vector3(0, 0, -10);
     }

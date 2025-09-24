@@ -26,7 +26,7 @@ public class PlayerBattleManager : CharacterManager {
         base.StatusReset();
         battleLife = maxBattleLife;
         currentRound = 0;
-        rerollCount = 1;
+        rerollCount = 0;
         winCount = 0;
     }
 }

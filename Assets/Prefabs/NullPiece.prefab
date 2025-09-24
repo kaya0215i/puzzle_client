@@ -50,6 +50,7 @@ MonoBehaviour:
   pieceFormId: 0
   itemNum: 0
   pieceAngle: {x: 0, y: 0, z: 0, w: 1}
+  piecePosition: {x: 0, y: 0}
   indexNum: -1
   isChainedFirstPiece: 0
   isTouch: 0

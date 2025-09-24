@@ -11,6 +11,9 @@ public class ShopManager : MonoBehaviour {
     // ショップの親オブジェクト
     [SerializeField] private Transform shopParent;
 
+    // ピースの親オブジェクト
+    [SerializeField] public Transform pieceParent;
+
     // ピースのオブジェクト
     [SerializeField] private GameObject shopPieces;
 
@@ -41,6 +44,7 @@ public class ShopManager : MonoBehaviour {
     // プレイヤーマネージャー
     [SerializeField] private PlayerBattleManager playerManager;
 
+    // ショップ内をリセット
     public void SortShop() {
         List<PieceManager> lockedPieceList = new List<PieceManager>();
 
@@ -197,5 +201,84 @@ public class ShopManager : MonoBehaviour {
         }
 
         return pieceObject;
+    }
+
+    // ショップのピースを取得
+    public List<PieceManager> GetShopPieceList() {
+        List<PieceManager> list = new List<PieceManager>();
+
+        foreach (Transform child in shopParent) {
+            list.Add(child.GetComponent<PieceManager>());
+        }
+
+        return list;
+    }
+
+    // 中断データからショップピースを作成
+    public void CreateShopPieceInterruptionData(List<PieceManagerDTO> pieceList) {
+        // ショップの親オブジェクトを空にする
+        foreach (Transform child in shopParent) {
+            Destroy(child.gameObject);
+        }
+
+        // プライスカードの親オブジェクトを空にする
+        foreach (Transform child in priceCardParend) {
+            Destroy(child.gameObject);
+        }
+
+        // ショップの親オブジェクトに入れる
+        int index = 0;
+        foreach (PieceManagerDTO piece in pieceList) {
+            int rnd = UnityEngine.Random.Range(0, 0);
+            float rndX = UnityEngine.Random.Range(-0.15f, 0.15f);
+            float rndY = UnityEngine.Random.Range(-0.15f, 0.15f);
+
+            Vector2 shopPos = piece.piecePosition;
+
+            // ピース作成
+            PieceManager createdPiece = CreatePiece(shopParent, shopPos, Quaternion.identity, true, piece.itemNum - 1, piece.pieceFormId).GetComponent<PieceManager>();
+            createdPiece.inShop = true;
+            createdPiece.shopPos = shopPos;
+            createdPiece.shopIndex = index;
+
+            // プライスカードの作成
+            Vector2 priceCardPos = new Vector2(createdPiece.shopPos.x, createdPiece.shopPos.y - 0.5f);
+            GameObject createdPriceCard = Instantiate(priceCardPrefab, priceCardPos, Quaternion.identity, priceCardParend);
+
+            Text priceText = createdPriceCard.transform.GetChild(0).GetComponent<Text>();
+            priceText.text = "" + createdPiece.transform.GetChild(0).GetComponent<PieceInfo>().price;
+
+            // ロックオブジェクトの作成
+            Vector2 lockeObjectPos = new Vector2(createdPiece.shopPos.x + 0.27f, createdPiece.shopPos.y + 0.355f);
+            Instantiate(padLockPrefab, lockeObjectPos, Quaternion.identity, createdPiece.transform);
+
+            index++;
+        }
+
+        // リロール用プライスカードの作成
+        GameObject createdRerollPriceCard = Instantiate(priceCardPrefab, new Vector2(2.37f, 3.9f), Quaternion.identity, priceCardParend);
+
+        Text rerollPriceText = createdRerollPriceCard.transform.GetChild(0).GetComponent<Text>();
+        rerollPriceText.text = "" + (1 + (int)(playerManager.rerollCount * 0.2f));
+    }
+
+    // 中断データのインベントリピースを作成
+    public void CreateInventoryPieceInterruptionData(List<PieceManagerDTO> pieceList) {
+        foreach (PieceManagerDTO piece in pieceList) {
+            GameObject obj = CreatePiece(pieceParent, piece.piecePosition, piece.pieceAngle, true, piece.itemNum - 1, piece.pieceFormId);
+
+            PieceManager pieceManager = obj.GetComponent<PieceManager>();
+
+            if (piece.isSet) {
+                obj.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Kinematic;
+
+                pieceManager.isChainedFirstPiece = true;
+                pieceManager.inField = true;
+                pieceManager.isSet = true;
+                if (piece.firstPiece) {
+                    pieceManager.firstPiece = true;
+                }
+            }
+        }
     }
 }

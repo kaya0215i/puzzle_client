@@ -22,6 +22,9 @@ public class BattleManager : MonoBehaviour {
     // ショップマネージャー
     [SerializeField] private ShopManager shopManager;
 
+    // データマネージャー
+    [SerializeField] private DataManager dataManager;
+
     // バトルのUIキャンバス
     [SerializeField] private GameObject battleUICanvas;
 
@@ -381,6 +384,9 @@ public class BattleManager : MonoBehaviour {
         }
 
         yield return RankAdjustment(isGameClear);
+
+        // 中断データを削除
+        dataManager.DeleteInterruptedData();
 
         yield return new WaitForSeconds(3);
         // ゲームを再読み込み
@@ -819,6 +825,17 @@ public class BattleManager : MonoBehaviour {
                 enemyCharacters[1].SetActive(false);
                 enemyCharacters[2].SetActive(true);
                 break;
+        }
+    }
+
+    // 中断データを読み込みトロフィーとバトルライフのUIを再設定
+    public void SetTrophyAndBattleLifeUIInterruptionData() {
+        for (int i = 0; i < playerManager.winCount; i++) {
+            winTrophys[i].SetActive(true);
+        }
+
+        for(int i = 3;i > playerManager.battleLife; i--) {
+            playerLifes[i-1] .SetActive(false);
         }
     }
 }

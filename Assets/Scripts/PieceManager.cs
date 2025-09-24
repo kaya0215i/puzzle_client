@@ -14,6 +14,7 @@ public class PieceManager : MonoBehaviour {
     public int pieceFormId;
     public int itemNum;
     public Quaternion pieceAngle;
+    public Vector2 piecePosition;
 
     public int indexNum;
     public bool isChainedFirstPiece;
@@ -85,6 +86,9 @@ public class PieceManager : MonoBehaviour {
         else {
             myRb.bodyType = RigidbodyType2D.Dynamic;
         }
+
+        pieceAngle = this.gameObject.transform.rotation;
+        piecePosition = this.gameObject.transform.position;
     }
 
     public void SetPiecePos() {

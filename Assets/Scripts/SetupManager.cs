@@ -14,6 +14,9 @@ public class SetupManager : MonoBehaviour {
     // プレイヤーマネージャー
     [SerializeField] private PlayerBattleManager playerManager;
 
+    // データマネージャー
+    [SerializeField] private DataManager dataManager;
+
     // ピースを動かしているかどうか
     private bool isMovePiece;
     // ロープを動かしているかどうか
@@ -310,6 +313,8 @@ public class SetupManager : MonoBehaviour {
         UpdateMoney();
         playerManager.currentRound++;
 
+        dataManager.SaveInterruptionData();
+
         AudioManager.Instance.ChangeBGM("SetupBGM");
     }
 
@@ -334,10 +339,6 @@ public class SetupManager : MonoBehaviour {
     public void OnStartBattleButton() {
         AudioManager.Instance.PlayOneShot("Button");
 
-        foreach(PieceManager piece in FieldPieceList) {
-            piece.pieceAngle = piece.transform.rotation;
-        }
-
         enabled = false;
 
         setupUICanvas.SetActive(false);
@@ -356,5 +357,35 @@ public class SetupManager : MonoBehaviour {
         playerManager.money += value;
 
         moneyText.text = playerManager.money.ToString();
+    }
+
+    // 中断データから再開
+    public void StartInterruptionData() {
+        if (dataManager.LoadInterruptionData()) {
+            enabled = true;
+            setupUICanvas.SetActive(true);
+
+            enabled = true;
+
+            UpdateMoney();
+
+            battleManager.SetBattlePlayerCharacter();
+            battleManager.SetTrophyAndBattleLifeUIInterruptionData();
+
+            AudioManager.Instance.ChangeBGM("SetupBGM");
+
+            SetListPiece();
+        }
+        else {
+
+        }
+    }
+
+    // 中断ボタン
+    public void OnClickInterruptionButton() {
+        dataManager.SaveInterruptionData();
+
+        // ゲームを再読み込み
+        Initiate.Fade("GameScene", Color.black, 0.5f);
     }
 }
