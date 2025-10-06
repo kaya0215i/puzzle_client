@@ -60,6 +60,9 @@ public class SetupManager : MonoBehaviour {
     // 売却エリアUI
     [SerializeField] private GameObject sellAreaObject;
 
+    // 回転ボタン
+    [SerializeField] private GameObject rotateButton;
+
     // フィールドサイズ
     const int FieldWidth = 7;
     const int FieldHeight = 7;
@@ -82,6 +85,7 @@ public class SetupManager : MonoBehaviour {
         pieceInfoPanel.SetActive(false);
         setupUICanvas.SetActive(false);
         sellAreaObject.SetActive(false);
+        rotateButton.SetActive(false);
 
         enabled = false;
     }
@@ -97,6 +101,9 @@ public class SetupManager : MonoBehaviour {
                     isMovePiece = true;
                     pieceManager = hitPiece.GetComponent<PieceManager>();
                     pieceManager.OnClick();
+
+                    // 回転ボタンを表示
+                    rotateButton.SetActive(true);
 
                     // 説明を表示
                     PieceInfo hitPieceInfo = hitPiece.transform.GetChild(0).GetComponent<PieceInfo>();
@@ -181,6 +188,9 @@ public class SetupManager : MonoBehaviour {
             isMovePiece = false;
             isMoveRope = false;
             sellAreaObject.SetActive(false);
+
+            // 回転ボタンを非表示
+            rotateButton.SetActive(false);
 
             if (hitPiece != null) {
                 if (hitPiece.CompareTag("Piece")) {
@@ -387,5 +397,11 @@ public class SetupManager : MonoBehaviour {
 
         // ゲームを再読み込み
         Initiate.Fade("GameScene", Color.black, 0.5f);
+    }
+
+    // 回転ボタン
+    public void OnClickRotateButton() {
+        // ピースの回転処理
+        pieceManager.Rotate();
     }
 }

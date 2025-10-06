@@ -10,6 +10,7 @@ public class NetworkManager : MonoBehaviour {
     // WebAPI‚ÌÚ‘±æ‚ğİ’è
 #if DEBUG
     const string API_BASE_URL = "http://localhost:8000/api/";
+    //const string API_BASE_URL = "ge202409.japaneast.cloudapp.azure.com/api/";
 #else
     const string API_BASE_URL = "http://localhost:8000/api/";
     //const string API_BASE_URL = "ge202409.japaneast.cloudapp.azure.com/api/";
