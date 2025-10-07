@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -103,7 +104,9 @@ public class SetupManager : MonoBehaviour {
                     pieceManager.OnClick();
 
                     // 回転ボタンを表示
-                    rotateButton.SetActive(true);
+                    if (!pieceManager.firstPiece) {
+                        rotateButton.SetActive(true);
+                    }
 
                     // 説明を表示
                     PieceInfo hitPieceInfo = hitPiece.transform.GetChild(0).GetComponent<PieceInfo>();
@@ -342,7 +345,13 @@ public class SetupManager : MonoBehaviour {
 
         SetFirstPiece();
 
+        StartCoroutine(ChangeBGM());
+    }
+
+    // BGM変更
+    private IEnumerator ChangeBGM() {
         AudioManager.Instance.ChangeBGM("SetupBGM");
+        yield break;
     }
 
     // バトルスタートボタン

@@ -22,20 +22,23 @@ public class TitleManager : MonoBehaviour {
     // UI
     [SerializeField] private GameObject titleUICanvas;
 
+    // タイトルUI
+    [SerializeField] private GameObject titleUIParent;
+
     // キャラクター選択用UI
-    [SerializeField] private GameObject characterSelectUICanvas;
+    [SerializeField] private GameObject characterSelectUIParent;
 
     // インプット用UI
-    [SerializeField] private GameObject inputUICanvas;
+    [SerializeField] private GameObject inputUIParent;
 
     // オプションUI
-    [SerializeField] private GameObject optionUICavas;
+    [SerializeField] private GameObject optionUIParent;
 
     // フレンドUI
-    [SerializeField] private GameObject friendUICanvas;
+    [SerializeField] private GameObject friendUIParent;
 
     // 遊び方UI
-    [SerializeField] private GameObject howtoUICanvas;
+    [SerializeField] private GameObject howtoUIParent;
 
     // 遊び方ページオブジェクト
     [SerializeField] private GameObject[] howtoObjects;
@@ -99,15 +102,15 @@ public class TitleManager : MonoBehaviour {
 
     private void Start() {
         Camera.main.transform.position = new Vector3(-15, 0, -10);
-        titleUICanvas.SetActive(false);
-        characterSelectUICanvas.SetActive(false);
-        inputUICanvas.SetActive(false);
-        optionUICavas.SetActive(false);
-        friendUICanvas.SetActive(false);
+        titleUICanvas.SetActive(true);
+        characterSelectUIParent.SetActive(false);
+        inputUIParent.SetActive(false);
+        optionUIParent.SetActive(false);
+        friendUIParent.SetActive(false);
         friendList.SetActive(false);
         friendRequestList.SetActive(false);
         playerSearch.SetActive(false);
-        howtoUICanvas.SetActive(false);
+        howtoUIParent.SetActive(false);
 
         for (int i = 0; i < characterObjects.Length; i++) {
             if(i == 0) {
@@ -180,15 +183,16 @@ public class TitleManager : MonoBehaviour {
     public void OnClickStartButton() {
         AudioManager.Instance.PlayOneShot("Button");
 
-        titleUICanvas.SetActive(false);
-        characterSelectUICanvas.SetActive(true);
+        titleUIParent.SetActive(false);
+        characterSelectUIParent.SetActive(true);
     }
 
     // ゲームスタートスタートボタン
     public void OnClickGameStartButton() {
         AudioManager.Instance.PlayOneShot("Button");
 
-        characterSelectUICanvas.SetActive(false);
+        characterSelectUIParent.SetActive(false);
+        titleUICanvas.SetActive(false);
 
         switch (currentCharacterIndex) {
             case 0:
@@ -213,7 +217,6 @@ public class TitleManager : MonoBehaviour {
     public void OnClickStartInterruptionDataButton() {
         AudioManager.Instance.PlayOneShot("Button");
 
-        characterSelectUICanvas.SetActive(false);
         titleUICanvas.SetActive(false);
 
         setupManager.StartInterruptionData();
@@ -225,8 +228,8 @@ public class TitleManager : MonoBehaviour {
     public void OnClickFriendButton() {
         AudioManager.Instance.PlayOneShot("Button");
 
-        titleUICanvas.SetActive(false);
-        friendUICanvas.SetActive(true);
+        titleUIParent.SetActive(false);
+        friendUIParent.SetActive(true);
 
         OnClickFriendListButton();
     }
@@ -391,8 +394,8 @@ public class TitleManager : MonoBehaviour {
     public void OnClickOptionButton() {
         AudioManager.Instance.PlayOneShot("Button");
 
-        titleUICanvas.SetActive(false);
-        optionUICavas.SetActive(true);
+        titleUIParent.SetActive(false);
+        optionUIParent.SetActive(true);
 
         changeNameParent.text = "";
         changeNamePlaceholder.text = NetworkManager.Instance.UserName;
@@ -403,7 +406,7 @@ public class TitleManager : MonoBehaviour {
         AudioManager.Instance.PlayOneShot("Button");
 
         obj.SetActive(false);
-        titleUICanvas.SetActive(true);
+        titleUIParent.SetActive(true);
     }
 
     // 名前変更ボタン
@@ -418,7 +421,7 @@ public class TitleManager : MonoBehaviour {
             NetworkManager.Instance.UserRankPoint, // ランクポイント
        result => {     // 登録終了後の処理
            if (result == true) {
-               OnClickCloceButton(optionUICavas);
+               OnClickCloceButton(optionUIParent);
                playerManager.name = changeNameText.text;
            }
            else {
@@ -430,8 +433,8 @@ public class TitleManager : MonoBehaviour {
 
     // 遊び方ボタン
     public void OnClickHowtoButton() {
-        titleUICanvas.SetActive(false);
-        howtoUICanvas.SetActive(true);
+        titleUIParent.SetActive(false);
+        howtoUIParent.SetActive(true);
 
         howtoObjects[currentHowtoPageIndex].SetActive(true);
         howtoNumText.text = (currentHowtoPageIndex + 1) + "/3";
@@ -521,7 +524,7 @@ public class TitleManager : MonoBehaviour {
         }
         else {
             //ユーザーデータが保存されてない場合は登録
-            inputUICanvas.SetActive(true);
+            inputUIParent.SetActive(true);
         }
     }
 
@@ -554,14 +557,15 @@ public class TitleManager : MonoBehaviour {
 
                     playerManager.SetName(NetworkManager.Instance.UserName);
                     UpdateRankText();
-                    titleUICanvas.SetActive(true);
-                    inputUICanvas.SetActive(false);
+                    
+                    titleUIParent.SetActive(true);
+                    inputUIParent.SetActive(false);
                 }
                 else {
                     Debug.Log("ユーザーを取得出来ませんでした");
 
-                    titleUICanvas.SetActive(false);
-                    inputUICanvas.SetActive(true);
+                    titleUIParent.SetActive(false);
+                    inputUIParent.SetActive(true);
                     RegistUser();
                 }
             }
