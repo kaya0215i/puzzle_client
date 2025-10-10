@@ -10,10 +10,10 @@ public class NetworkManager : MonoBehaviour {
     // WebAPIの接続先を設定
 #if DEBUG
     const string API_BASE_URL = "http://localhost:8000/api/";
-    //const string API_BASE_URL = "ge202409.japaneast.cloudapp.azure.com/api/";
+    //const string API_BASE_URL = "http://ge202409.japaneast.cloudapp.azure.com/api/";
 #else
-    const string API_BASE_URL = "http://localhost:8000/api/";
-    //const string API_BASE_URL = "ge202409.japaneast.cloudapp.azure.com/api/";
+    //const string API_BASE_URL = "http://localhost:8000/api/";
+    const string API_BASE_URL = "http://ge202409.japaneast.cloudapp.azure.com/api/";
 #endif
 
     private string apiToken; // 自分のAPIToken
@@ -58,6 +58,9 @@ public class NetworkManager : MonoBehaviour {
         requestData.Name = name;
         // サーバーに送信するオブジェクトをJSONに変換
         string json = JsonConvert.SerializeObject(requestData);
+
+        Debug.Log(json);
+
         // 送信
         UnityWebRequest request = UnityWebRequest.Post(API_BASE_URL + "users/store", json, "application/json");
         yield return request.SendWebRequest();

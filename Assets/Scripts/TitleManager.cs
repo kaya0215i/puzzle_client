@@ -495,7 +495,7 @@ public class TitleManager : MonoBehaviour {
     public IEnumerator UserDataComm() {
         // アイテムデータを取得
         ItemDataSO.Instance.itemDataList = new List<ItemData>();
-        StartCoroutine(NetworkManager.Instance.GetItemData(
+        yield return StartCoroutine(NetworkManager.Instance.GetItemData(
             result => {
                 if (result != null) {
                     foreach (ItemDataResponse item in result) {
@@ -513,6 +513,7 @@ public class TitleManager : MonoBehaviour {
                             };
                             
                             ItemDataSO.Instance.itemDataList.Add(itemData);
+                            Debug.Log(itemData.id);
                         }
                     }
                 }
