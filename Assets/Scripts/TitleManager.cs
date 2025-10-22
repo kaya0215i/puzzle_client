@@ -130,11 +130,6 @@ public class TitleManager : MonoBehaviour {
         StartCoroutine(UserDataComm());
 
         continueButton.gameObject.SetActive(false);
-
-        // 中断データがあるか
-        if (dataManager.ExistsInterruptedData()) {
-            continueButton.gameObject.SetActive(true);
-        }
     }
 
     // キャラクター変更ボタン左
@@ -522,6 +517,11 @@ public class TitleManager : MonoBehaviour {
         bool isSuccess = NetworkManager.Instance.LoadUserData();
         if (isSuccess) {
             yield return GetUserData();
+
+            // 中断データがあるか
+            if (dataManager.ExistsInterruptedData()) {
+                continueButton.gameObject.SetActive(true);
+            }
         }
         else {
             //ユーザーデータが保存されてない場合は登録
@@ -539,6 +539,7 @@ public class TitleManager : MonoBehaviour {
           result => {                          // 登録終了後の処理
               if (result == true) {
                   GetUserData();
+                  dataManager.DeleteInterruptedData();
               }
               else {
                   Debug.Log("ユーザー登録が正常に終了しませんでした。");

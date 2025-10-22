@@ -96,7 +96,7 @@ public class DataManager : MonoBehaviour {
         return true;
     }
 
-    // ゲームクリア時に中断データを削除する
+    // 中断データを削除する
     public void DeleteInterruptedData() {
         File.Delete(Application.persistentDataPath + "/interruptionData.json");
     }
